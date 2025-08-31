@@ -15,24 +15,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 import { convertUnits, formatNumber } from "@/lib/conversion-engine"
 import { getUnitsByCategory } from "@/lib/units-registry"
-import type { Unit } from "@/lib/units-registry"
+import type { SerializableUnit, SerializableConverter } from "@/lib/types"
 
 interface ConverterPageProps {
-  fromUnit: Unit
-  toUnit: Unit
+  fromUnit: SerializableUnit
+  toUnit: SerializableUnit
   examples: Array<{ input: number; output: number }>
-  relatedConverters: Array<{
-    fromUnit: Unit
-    toUnit: Unit
-    slug: string
-    label: string
-  }>
-  reverseConverter: {
-    fromUnit: Unit
-    toUnit: Unit
-    slug: string
-    label: string
-  }
+  relatedConverters: SerializableConverter[]
+  reverseConverter: SerializableConverter
   useCases: string[]
 }
 
@@ -51,8 +41,18 @@ export function ConverterPage({
   const [selectedToUnit, setSelectedToUnit] = useState(toUnit.id)
 
   const categoryUnits = getUnitsByCategory(fromUnit.category)
-  const currentFromUnit = categoryUnits.find((unit) => unit.id === selectedFromUnit) || fromUnit
-  const currentToUnit = categoryUnits.find((unit) => unit.id === selectedToUnit) || toUnit
+  const currentFromUnit = categoryUnits.find((unit) => unit.id === selectedFromUnit) || {
+    id: fromUnit.id,
+    name: fromUnit.name,
+    symbol: fromUnit.symbol,
+    category: fromUnit.category,
+  }
+  const currentToUnit = categoryUnits.find((unit) => unit.id === selectedToUnit) || {
+    id: toUnit.id,
+    name: toUnit.name,
+    symbol: toUnit.symbol,
+    category: toUnit.category,
+  }
 
   useEffect(() => {
     const value = Number.parseFloat(inputValue) || 0

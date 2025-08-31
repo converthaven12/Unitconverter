@@ -6,6 +6,7 @@ import { getQuickExamples } from "@/lib/conversion-engine"
 import { generateCanonicalUrl, generateKeywords } from "@/lib/seo-utils"
 import { ConverterPage } from "@/components/converter-page"
 import { StructuredData } from "@/components/structured-data"
+import type { SerializableUnit, SerializableConverter } from "@/lib/types"
 
 interface PageProps {
   params: Promise<{ slug: string }>
@@ -114,20 +115,40 @@ export default async function ConverterPageRoute({ params }: PageProps) {
 
   // Get related converters (same category)
   const categoryUnits = getUnitsByCategory(fromUnit.category)
-  const relatedConverters = categoryUnits
+
+  const serializableFromUnit: SerializableUnit = {
+    id: fromUnit.id,
+    name: fromUnit.name,
+    symbol: fromUnit.symbol,
+    category: fromUnit.category,
+  }
+
+  const serializableToUnit: SerializableUnit = {
+    id: toUnit.id,
+    name: toUnit.name,
+    symbol: toUnit.symbol,
+    category: toUnit.category,
+  }
+
+  const relatedConverters: SerializableConverter[] = categoryUnits
     .filter((unit) => unit.id !== fromUnitId && unit.id !== toUnitId)
     .slice(0, 8)
     .map((unit) => ({
-      fromUnit: fromUnit,
-      toUnit: unit,
+      fromUnit: serializableFromUnit,
+      toUnit: {
+        id: unit.id,
+        name: unit.name,
+        symbol: unit.symbol,
+        category: unit.category,
+      },
       slug: `${fromUnitId}-to-${unit.id}`,
       label: `${fromUnit.symbol} → ${unit.symbol}`,
     }))
 
   // Get reverse converter
-  const reverseConverter = {
-    fromUnit: toUnit,
-    toUnit: fromUnit,
+  const reverseConverter: SerializableConverter = {
+    fromUnit: serializableToUnit,
+    toUnit: serializableFromUnit,
     slug: `${toUnitId}-to-${fromUnitId}`,
     label: `${toUnit.symbol} → ${fromUnit.symbol}`,
   }
@@ -139,8 +160,8 @@ export default async function ConverterPageRoute({ params }: PageProps) {
     <>
       <StructuredData fromUnit={fromUnit} toUnit={toUnit} slug={slug} />
       <ConverterPage
-        fromUnit={fromUnit}
-        toUnit={toUnit}
+        fromUnit={serializableFromUnit}
+        toUnit={serializableToUnit}
         examples={examples}
         relatedConverters={relatedConverters}
         reverseConverter={reverseConverter}
