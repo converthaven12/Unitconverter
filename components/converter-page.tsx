@@ -271,6 +271,25 @@ export function ConverterPage({
               </Card>
             </section>
 
+            {/* Comprehensive Article Section */}
+            <section className="max-w-4xl mx-auto space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <BookOpen className="size-5" />
+                    {articleContent.title}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {articleContent.content.map((paragraph, index) => (
+                    <p key={index} className="text-muted-foreground leading-relaxed">
+                      {paragraph}
+                    </p>
+                  ))}
+                </CardContent>
+              </Card>
+            </section>
+
             {/* Quick Examples and Use Cases */}
             <section className="max-w-4xl mx-auto">
               <Tabs defaultValue="examples" className="w-full">

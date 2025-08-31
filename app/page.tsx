@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Calculator, ArrowRight, Zap, Target, Globe } from "lucide-react"
+import { Calculator, ArrowRight, Zap, Target, Globe, BookOpen } from "lucide-react"
 import Script from "next/script"
 
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
@@ -58,9 +58,8 @@ export default function HomePage() {
             </header>
 
             <main className="flex-1 p-6 space-y-8">
-              {/* Hero Section */}
-              <section className="text-center space-y-4">
-                <div className="space-y-2">
+              <section className="text-center space-y-6">
+                <div className="space-y-4">
                   <h1 className="text-4xl font-bold tracking-tight text-balance">Convert Any Unit Instantly</h1>
                   <p className="text-xl text-muted-foreground text-pretty max-w-2xl mx-auto">
                     Professional-grade unit converter supporting 27 categories and 150+ units. From metric to imperial,
@@ -68,7 +67,36 @@ export default function HomePage() {
                   </p>
                 </div>
 
-                <div className="flex flex-wrap justify-center gap-2 mt-4">
+                <div className="max-w-4xl mx-auto space-y-4">
+                  <p className="text-lg text-muted-foreground leading-relaxed">
+                    Welcome to the most comprehensive unit converter on the web. Whether you're a student working on
+                    physics problems, an engineer designing systems, a chef scaling recipes, or simply curious about
+                    measurements, our converter provides instant, accurate results with detailed explanations.
+                  </p>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                    <div className="p-4 rounded-lg bg-primary/5 border">
+                      <h3 className="font-semibold text-primary mb-2">150+ Units</h3>
+                      <p className="text-sm text-muted-foreground">
+                        From common measurements to specialized scientific units across 27 categories
+                      </p>
+                    </div>
+                    <div className="p-4 rounded-lg bg-primary/5 border">
+                      <h3 className="font-semibold text-primary mb-2">Instant Results</h3>
+                      <p className="text-sm text-muted-foreground">
+                        Real-time conversion with formulas, examples, and detailed explanations
+                      </p>
+                    </div>
+                    <div className="p-4 rounded-lg bg-primary/5 border">
+                      <h3 className="font-semibold text-primary mb-2">Always Accurate</h3>
+                      <p className="text-sm text-muted-foreground">
+                        Based on official conversion factors and scientific standards
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap justify-center gap-2 mt-6">
                   {categories.slice(0, 6).map((category) => (
                     <Badge key={category.id} variant="secondary" className="text-sm">
                       {category.name}
@@ -265,6 +293,82 @@ export default function HomePage() {
                       </tr>
                     </tbody>
                   </table>
+                </div>
+              </section>
+
+              <section className="space-y-6">
+                <div className="text-center">
+                  <h2 className="text-2xl font-semibold mb-2">About Unit Conversion</h2>
+                  <p className="text-muted-foreground">Understanding the importance of accurate measurements</p>
+                </div>
+
+                <div className="max-w-4xl mx-auto space-y-6">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <BookOpen className="size-5" />
+                        The Science of Unit Conversion
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <p className="text-muted-foreground leading-relaxed">
+                        Unit conversion is the process of changing a measurement from one unit to another while
+                        maintaining the same quantity. This fundamental concept bridges different measurement systems
+                        used worldwide, enabling clear communication in science, engineering, commerce, and daily life.
+                      </p>
+
+                      <p className="text-muted-foreground leading-relaxed">
+                        Our converter uses a base-unit conversion model, where all units are first converted to a
+                        standard base unit (like meters for length or kilograms for mass) and then converted to the
+                        target unit. This approach ensures maximum accuracy and consistency across all conversions.
+                      </p>
+
+                      <p className="text-muted-foreground leading-relaxed">
+                        From the ancient Egyptian cubit to modern SI units, measurement systems have evolved to meet
+                        humanity's growing need for precision. Today's global economy depends on standardized
+                        measurements for everything from international trade to scientific research, making accurate
+                        unit conversion more important than ever.
+                      </p>
+                    </CardContent>
+                  </Card>
+
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Why Choose Our Unit Converter?</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <h4 className="font-medium">Comprehensive Coverage</h4>
+                          <p className="text-sm text-muted-foreground">
+                            27 categories covering everything from basic length and weight to specialized units like
+                            radioactivity and magnetic field strength.
+                          </p>
+                        </div>
+                        <div className="space-y-2">
+                          <h4 className="font-medium">Educational Value</h4>
+                          <p className="text-sm text-muted-foreground">
+                            Each conversion includes formulas, examples, and real-world applications to help you
+                            understand the relationship between units.
+                          </p>
+                        </div>
+                        <div className="space-y-2">
+                          <h4 className="font-medium">Mobile Optimized</h4>
+                          <p className="text-sm text-muted-foreground">
+                            Responsive design works perfectly on all devices, from desktop computers to smartphones and
+                            tablets.
+                          </p>
+                        </div>
+                        <div className="space-y-2">
+                          <h4 className="font-medium">Always Free</h4>
+                          <p className="text-sm text-muted-foreground">
+                            No registration required, no limits on conversions, and no hidden fees. Professional-grade
+                            tools available to everyone.
+                          </p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
                 </div>
               </section>
             </main>
