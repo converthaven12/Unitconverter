@@ -9,23 +9,25 @@ import { Footer } from "@/components/footer"
 
 import type { Metadata } from "next";
 
+import type { Metadata } from "next";
+import "./globals.css";
+
 export const metadata: Metadata = {
   title: "Unit Converter — Convert Any Units Instantly",
   description:
-    Effortlessly convert units across 20+ categories, including length, weight, temperature, and volume. Access metric, imperial, and specialized units with ease!
+    "Free online unit converter for length, weight, temperature, volume and 20+ categories. Convert between metric, imperial and other units with accurate formulas.",
+};
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
-      <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
-        <Suspense fallback={null}>{children}</Suspense>
-        <Footer />
-        <Analytics />
-      </body>
+      <body>{children}</body>
     </html>
-  )
+  );
+}
+
 }
