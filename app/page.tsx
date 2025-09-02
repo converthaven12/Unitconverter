@@ -60,9 +60,9 @@ export default function HomePage() {
             <main className="flex-1 p-6 space-y-8">
               <section className="text-center space-y-6">
                 <div className="space-y-4">
-                  <h1 className="text-4xl font-bold tracking-tight text-balance">ConverterAny Unit Instantly</h1>
+                  <h1 className="text-4xl font-bold tracking-tight text-balance">Convert Any Unit Instantly</h1>
                   <p className="text-xl text-muted-foreground text-pretty max-w-2xl mx-auto">
-                    Professional-grade unit converter supporting 28 categories and 150+ units. From metric to imperial, scientific to everyday measurements.
+                    Professional-grade unit converter supporting 27 categories and 150+ units. From metric to imperial, scientific to everyday measurements.
                   </p>
                 </div>
 

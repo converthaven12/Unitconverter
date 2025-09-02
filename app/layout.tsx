@@ -7,27 +7,25 @@ import { Suspense } from "react"
 import "./globals.css"
 import { Footer } from "@/components/footer"
 
-import type { Metadata } from "next";
-
-import type { Metadata } from "next";
-import "./globals.css";
-
 export const metadata: Metadata = {
-  title: "Unit Converter — Convert Any Units Instantly",
+  title: "Unit Converter - Convert Between Any Units Instantly",
   description:
-    "Free online unit converter for length, weight, temperature, volume and 20+ categories. Convert between metric, imperial and other units with accurate formulas.",
-};
+    "Professional unit converter supporting length, weight, temperature, volume, and 20+ categories. Convert between metric, imperial, and specialized units with accurate formulas.",
+  generator: "v0.app",
+}
 
 export default function RootLayout({
   children,
-}: {
-  children: React.ReactNode;
-}) {
+}: Readonly<{
+  children: React.ReactNode
+}>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
+        <Suspense fallback={null}>{children}</Suspense>
+        <Footer />
+        <Analytics />
+      </body>
     </html>
-  );
-}
-
+  )
 }
