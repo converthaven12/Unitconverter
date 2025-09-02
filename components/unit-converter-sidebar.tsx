@@ -63,9 +63,11 @@ export function UnitConverterSidebar({ className }: UnitConverterSidebarProps) {
       console.log("[v0] Navigating to:", url)
       setIsNavigating(true)
 
+      const staticUrl = url.endsWith("/") ? url : `${url}/`
+
       // Add a small delay to prevent rapid navigation
       setTimeout(() => {
-        router.push(url)
+        router.push(staticUrl)
         // Reset navigation state after a delay
         setTimeout(() => setIsNavigating(false), 1000)
       }, 100)
@@ -248,7 +250,7 @@ export function UnitConverterSidebar({ className }: UnitConverterSidebarProps) {
                 <SidebarMenuItem key={`${pair.from}-${pair.to}`}>
                   <SidebarMenuButton asChild>
                     <Link
-                      href={`/converters/${pair.from}-to-${pair.to}`}
+                      href={`/converters/${pair.from}-to-${pair.to}/`}
                       className="transition-all duration-150 hover:bg-accent"
                     >
                       <span className="text-sm">{pair.label}</span>
@@ -273,8 +275,8 @@ export function UnitConverterSidebar({ className }: UnitConverterSidebarProps) {
                 const firstTwoUnits = categoryUnits.slice(0, 2)
                 const defaultConverterUrl =
                   firstTwoUnits.length >= 2
-                    ? `/converters/${firstTwoUnits[0].id}-to-${firstTwoUnits[1].id}`
-                    : `/converters/${categoryUnits[0]?.id}-to-${categoryUnits[0]?.id}`
+                    ? `/converters/${firstTwoUnits[0].id}-to-${firstTwoUnits[1].id}/`
+                    : `/converters/${categoryUnits[0]?.id}-to-${categoryUnits[0]?.id}/`
 
                 return (
                   <SidebarMenuItem key={category.id}>
