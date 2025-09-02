@@ -11,20 +11,7 @@ const nextConfig = {
   },
   trailingSlash: false,
   async redirects() {
-    return [
-      // Redirect uppercase Converters to lowercase converters
-      {
-        source: '/Converters/:path*',
-        destination: '/converters/:path*',
-        permanent: true,
-      },
-      // Remove trailing slashes from converter paths
-      {
-        source: '/converters/:path*/',
-        destination: '/converters/:path*',
-        permanent: true,
-      },
-    ]
+    return []
   },
 }
 
