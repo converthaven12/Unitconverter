@@ -1139,7 +1139,10 @@ export function getUnitById(id: string): Unit | undefined {
 }
 
 export function getUnitsByCategory(categoryId: string): Unit[] {
-  return units.filter((unit) => unit.category === categoryId)
+  if (!categoryId || !Array.isArray(units)) {
+    return []
+  }
+  return units.filter((unit) => unit && unit.category === categoryId)
 }
 
 export function getCategoryById(id: string): Category | undefined {

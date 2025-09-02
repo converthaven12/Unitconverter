@@ -113,8 +113,7 @@ export default async function ConverterPageRoute({ params }: PageProps) {
   // Get quick examples
   const examples = getQuickExamples(fromUnitId, toUnitId)
 
-  // Get related converters (same category)
-  const categoryUnits = getUnitsByCategory(fromUnit.category)
+  const categoryUnits = getUnitsByCategory(fromUnit.category) || []
 
   const serializableFromUnit: SerializableUnit = {
     id: fromUnit.id,
@@ -130,20 +129,22 @@ export default async function ConverterPageRoute({ params }: PageProps) {
     category: toUnit.category,
   }
 
-  const relatedConverters: SerializableConverter[] = categoryUnits
-    .filter((unit) => unit.id !== fromUnitId && unit.id !== toUnitId)
-    .slice(0, 8)
-    .map((unit) => ({
-      fromUnit: serializableFromUnit,
-      toUnit: {
-        id: unit.id,
-        name: unit.name,
-        symbol: unit.symbol,
-        category: unit.category,
-      },
-      slug: `${fromUnitId}-to-${unit.id}`,
-      label: `${fromUnit.symbol} → ${unit.symbol}`,
-    }))
+  const relatedConverters: SerializableConverter[] = Array.isArray(categoryUnits)
+    ? categoryUnits
+        .filter((unit) => unit && unit.id !== fromUnitId && unit.id !== toUnitId)
+        .slice(0, 8)
+        .map((unit) => ({
+          fromUnit: serializableFromUnit,
+          toUnit: {
+            id: unit.id,
+            name: unit.name,
+            symbol: unit.symbol,
+            category: unit.category,
+          },
+          slug: `${fromUnitId}-to-${unit.id}`,
+          label: `${fromUnit.symbol} → ${unit.symbol}`,
+        }))
+    : []
 
   // Get reverse converter
   const reverseConverter: SerializableConverter = {
