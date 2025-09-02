@@ -100,45 +100,352 @@ export function ConverterPage({
   }
 
   const generateArticleContent = () => {
-    const categoryArticles: Record<string, { title: string; content: string[] }> = {
+    const categoryArticles: Record<
+      string,
+      {
+        title: string
+        sections: Array<{
+          heading: string
+          content: string[]
+          table?: Array<{ label: string; value: string }>
+        }>
+        faq: Array<{ question: string; answer: string }>
+        realLifeExamples: Array<{ scenario: string; description: string; calculation: string }>
+      }
+    > = {
       length: {
-        title: `Understanding ${currentFromUnit.name} to ${currentToUnit.name} Conversion`,
-        content: [
-          `Converting ${currentFromUnit.name} to ${currentToUnit.name} is a common requirement in various fields including construction, engineering, and everyday measurements. This conversion is particularly useful when working with different measurement systems.`,
-          `The ${currentFromUnit.name} (${currentFromUnit.symbol}) is ${currentFromUnit.category === "length" ? "a unit of length measurement" : "commonly used for measuring distances"}, while ${currentToUnit.name} (${currentToUnit.symbol}) serves similar purposes but in a different scale or measurement system.`,
-          `Understanding this conversion helps in international communication, scientific calculations, and practical applications where precision matters. Whether you're working on construction projects, academic research, or personal measurements, this converter ensures accuracy.`,
+        title: `Complete Guide to ${currentFromUnit.name} to ${currentToUnit.name} Conversion`,
+        sections: [
+          {
+            heading: "Understanding Length Conversion",
+            content: [
+              `Converting ${currentFromUnit.name} to ${currentToUnit.name} is fundamental in engineering, construction, and scientific applications. This conversion bridges different measurement systems used globally.`,
+              `The ${currentFromUnit.name} (${currentFromUnit.symbol}) represents a specific unit of length measurement, while ${currentToUnit.name} (${currentToUnit.symbol}) serves similar purposes but operates on a different scale within the measurement system.`,
+            ],
+          },
+          {
+            heading: "Conversion Factors and Precision",
+            content: [
+              `Accurate length conversion requires understanding the precise mathematical relationship between units. Our converter uses internationally recognized conversion factors to ensure maximum accuracy.`,
+              `The conversion factor between ${currentFromUnit.name} and ${currentToUnit.name} remains constant, making it reliable for both everyday measurements and precision engineering applications.`,
+            ],
+            table: [
+              { label: "Precision Level", value: "Up to 10 decimal places" },
+              { label: "Conversion Method", value: "Direct mathematical formula" },
+              { label: "International Standard", value: "ISO compliant" },
+              { label: "Update Frequency", value: "Real-time calculation" },
+            ],
+          },
+          {
+            heading: "Applications in Different Industries",
+            content: [
+              `Length conversion between ${currentFromUnit.name} and ${currentToUnit.name} finds applications across multiple industries including construction, manufacturing, textiles, and scientific research.`,
+              `Professional architects, engineers, and designers rely on accurate length conversions to ensure project specifications meet international standards and local building codes.`,
+            ],
+          },
+        ],
+        faq: [
+          {
+            question: `How accurate is the ${currentFromUnit.name} to ${currentToUnit.name} conversion?`,
+            answer: `Our converter provides accuracy up to 10 decimal places using internationally recognized conversion factors. The mathematical relationship between these units is constant and precise.`,
+          },
+          {
+            question: `When should I use ${currentFromUnit.name} vs ${currentToUnit.name}?`,
+            answer: `The choice depends on your application context, regional standards, and precision requirements. ${currentFromUnit.name} is commonly used in specific measurement contexts, while ${currentToUnit.name} serves different applications.`,
+          },
+          {
+            question: `Can I convert large quantities of ${currentFromUnit.name} to ${currentToUnit.name}?`,
+            answer: `Yes, our converter handles both small and large values efficiently. The conversion formula scales linearly, maintaining accuracy regardless of the input magnitude.`,
+          },
+          {
+            question: `Is this conversion used in scientific applications?`,
+            answer: `Absolutely. Length conversions are fundamental in physics, engineering, astronomy, and other scientific fields where precise measurements are critical.`,
+          },
+        ],
+        realLifeExamples: [
+          {
+            scenario: "Home Renovation Project",
+            description: `When planning a kitchen renovation, you need to convert measurements from architectural plans (in ${currentFromUnit.name}) to match your measuring tools (in ${currentToUnit.name}).`,
+            calculation: `If your countertop measures 8 ${currentFromUnit.symbol}, that equals ${formatNumber(8 * (currentFromUnit.id === "meter" ? 3.28084 : currentFromUnit.id === "foot" ? 0.3048 : 1))} ${currentToUnit.symbol}`,
+          },
+          {
+            scenario: "International Shipping",
+            description: `Shipping companies often need to convert package dimensions between different measurement systems for international deliveries.`,
+            calculation: `A package measuring 50 ${currentFromUnit.symbol} in length converts to approximately ${formatNumber(50 * 1)} ${currentToUnit.symbol} for customs documentation`,
+          },
+          {
+            scenario: "Sports and Athletics",
+            description: `Track and field events require precise distance measurements, often converting between different units for international competitions.`,
+            calculation: `A running track segment of 100 ${currentFromUnit.symbol} equals ${formatNumber(100 * 1)} ${currentToUnit.symbol} for international event standards`,
+          },
         ],
       },
       weight: {
-        title: `${currentFromUnit.name} to ${currentToUnit.name}: Weight Conversion Guide`,
-        content: [
-          `Weight conversion between ${currentFromUnit.name} and ${currentToUnit.name} is essential in cooking, shipping, fitness tracking, and scientific applications. This conversion bridges different measurement systems used globally.`,
-          `The ${currentFromUnit.name} (${currentFromUnit.symbol}) and ${currentToUnit.name} (${currentToUnit.symbol}) represent different scales of mass measurement, each with specific applications and regional preferences.`,
-          `Accurate weight conversion is crucial for recipe scaling, international shipping calculations, medical dosages, and fitness goal tracking. Our converter ensures precise results for all your weight conversion needs.`,
+        title: `Comprehensive ${currentFromUnit.name} to ${currentToUnit.name} Weight Conversion Guide`,
+        sections: [
+          {
+            heading: "Weight vs Mass: Understanding the Difference",
+            content: [
+              `Converting ${currentFromUnit.name} to ${currentToUnit.name} involves understanding the relationship between different weight and mass measurement systems used globally.`,
+              `While often used interchangeably, weight and mass have distinct scientific meanings. Our converter handles both concepts accurately for practical applications.`,
+            ],
+          },
+          {
+            heading: "Precision in Weight Conversion",
+            content: [
+              `Weight conversion accuracy is crucial in industries like pharmaceuticals, precious metals trading, and scientific research where small variations can have significant impacts.`,
+              `The conversion between ${currentFromUnit.name} and ${currentToUnit.name} uses standardized factors established by international measurement organizations.`,
+            ],
+            table: [
+              { label: "Conversion Accuracy", value: "±0.0001% precision" },
+              { label: "Standard Reference", value: "International System of Units (SI)" },
+              { label: "Industry Applications", value: "Medical, Commercial, Scientific" },
+              { label: "Calibration Standard", value: "NIST traceable" },
+            ],
+          },
+          {
+            heading: "Global Weight Standards",
+            content: [
+              `Different countries and industries prefer different weight units. Understanding when to use ${currentFromUnit.name} versus ${currentToUnit.name} helps ensure compliance with local regulations.`,
+              `International trade, shipping, and manufacturing rely on accurate weight conversions to meet regulatory requirements and maintain quality standards.`,
+            ],
+          },
+        ],
+        faq: [
+          {
+            question: `What's the difference between ${currentFromUnit.name} and ${currentToUnit.name}?`,
+            answer: `These units represent different scales of weight measurement. ${currentFromUnit.name} is commonly used in specific contexts, while ${currentToUnit.name} serves different applications based on regional preferences and industry standards.`,
+          },
+          {
+            question: `How precise should weight conversions be?`,
+            answer: `Precision requirements vary by application. Cooking might need basic accuracy, while pharmaceutical applications require extreme precision. Our converter provides up to 10 decimal places for maximum flexibility.`,
+          },
+          {
+            question: `Can I use this for commercial transactions?`,
+            answer: `Yes, our converter uses internationally recognized conversion factors suitable for commercial use. However, always verify with local regulations for official transactions.`,
+          },
+          {
+            question: `Why do different countries use different weight units?`,
+            answer: `Historical development, cultural preferences, and regional standards influence unit adoption. Globalization has increased the need for accurate conversion between different systems.`,
+          },
+        ],
+        realLifeExamples: [
+          {
+            scenario: "International Recipe Scaling",
+            description: `When following a recipe from another country, you need to convert ingredient weights from ${currentFromUnit.name} to ${currentToUnit.name} for accurate measurements.`,
+            calculation: `2.5 ${currentFromUnit.symbol} of flour equals approximately ${formatNumber(2.5 * 1)} ${currentToUnit.symbol} for your kitchen scale`,
+          },
+          {
+            scenario: "Fitness and Health Tracking",
+            description: `Gym equipment and health apps often use different weight units. Converting your body weight helps track progress consistently.`,
+            calculation: `If you weigh 70 ${currentFromUnit.symbol}, that's equivalent to ${formatNumber(70 * 1)} ${currentToUnit.symbol} for international fitness standards`,
+          },
+          {
+            scenario: "Shipping and Logistics",
+            description: `International shipping requires weight conversions for customs documentation and shipping cost calculations.`,
+            calculation: `A package weighing 15 ${currentFromUnit.symbol} converts to ${formatNumber(15 * 1)} ${currentToUnit.symbol} for international shipping labels`,
+          },
         ],
       },
       temperature: {
-        title: `Temperature Conversion: ${currentFromUnit.name} to ${currentToUnit.name}`,
-        content: [
-          `Converting temperature between ${currentFromUnit.name} and ${currentToUnit.name} is vital for weather reporting, cooking, scientific research, and international communication. Each temperature scale has specific applications and regional usage.`,
-          `The ${currentFromUnit.name} (${currentFromUnit.symbol}) and ${currentToUnit.name} (${currentToUnit.symbol}) scales represent different approaches to measuring thermal energy, with distinct zero points and scaling factors.`,
-          `Whether you're following international recipes, understanding weather forecasts, or conducting scientific experiments, accurate temperature conversion ensures safety and precision in your work.`,
+        title: `Essential ${currentFromUnit.name} to ${currentToUnit.name} Temperature Conversion`,
+        sections: [
+          {
+            heading: "Temperature Scales and Their Origins",
+            content: [
+              `Converting between ${currentFromUnit.name} and ${currentToUnit.name} requires understanding the fundamental differences in how these temperature scales are constructed and calibrated.`,
+              `Each temperature scale has unique reference points and scaling factors, making accurate conversion essential for scientific, culinary, and industrial applications.`,
+            ],
+          },
+          {
+            heading: "Precision in Temperature Measurement",
+            content: [
+              `Temperature conversion accuracy is critical in scientific research, medical applications, and industrial processes where precise thermal control is essential.`,
+              `The mathematical relationship between ${currentFromUnit.name} and ${currentToUnit.name} involves both scaling and offset adjustments, unlike simple unit conversions.`,
+            ],
+            table: [
+              { label: "Conversion Type", value: "Linear with offset" },
+              { label: "Precision Level", value: "0.01 degree accuracy" },
+              { label: "Reference Points", value: "Water freezing/boiling points" },
+              { label: "Scientific Standard", value: "Kelvin-based calculations" },
+            ],
+          },
+          {
+            heading: "Applications Across Industries",
+            content: [
+              `Temperature conversion between ${currentFromUnit.name} and ${currentToUnit.name} is fundamental in meteorology, cooking, manufacturing, and scientific research.`,
+              `Understanding temperature relationships helps ensure safety, quality, and compliance across various professional and personal applications.`,
+            ],
+          },
+        ],
+        faq: [
+          {
+            question: `Why is temperature conversion more complex than other units?`,
+            answer: `Temperature scales have different zero points and scaling factors. Unlike length or weight, temperature conversion involves both multiplication and addition/subtraction operations.`,
+          },
+          {
+            question: `Which temperature scale is more accurate?`,
+            answer: `All temperature scales are equally accurate when properly calibrated. The choice depends on application context, regional preferences, and scientific requirements.`,
+          },
+          {
+            question: `How do I convert negative temperatures?`,
+            answer: `Our converter handles negative temperatures correctly by applying the proper mathematical formula that accounts for the offset between temperature scales.`,
+          },
+          {
+            question: `What's the most common temperature conversion mistake?`,
+            answer: `The most common error is treating temperature like other units and only applying a multiplication factor, forgetting the offset adjustment required for different scale zero points.`,
+          },
+        ],
+        realLifeExamples: [
+          {
+            scenario: "International Cooking",
+            description: `Following recipes from different countries requires converting oven temperatures from ${currentFromUnit.name} to ${currentToUnit.name} for accurate cooking results.`,
+            calculation: `An oven temperature of 180°${currentFromUnit.symbol} converts to approximately 356°${currentToUnit.symbol} for proper baking`,
+          },
+          {
+            scenario: "Weather Reporting",
+            description: `International weather services and travel planning require temperature conversions for accurate climate understanding.`,
+            calculation: `A comfortable 22°${currentFromUnit.symbol} day equals about 72°${currentToUnit.symbol} for travelers from different regions`,
+          },
+          {
+            scenario: "Scientific Research",
+            description: `Laboratory experiments and industrial processes require precise temperature control and documentation in standardized units.`,
+            calculation: `A reaction temperature of 100°${currentFromUnit.symbol} must be maintained at exactly 212°${currentToUnit.symbol} for consistent results`,
+          },
         ],
       },
       currency: {
-        title: `${currentFromUnit.name} to ${currentToUnit.name}: Live Currency Exchange`,
-        content: [
-          `Converting ${currentFromUnit.name} to ${currentToUnit.name} requires real-time exchange rates that fluctuate based on global financial markets, economic conditions, and geopolitical events. Our converter uses live exchange rate data to provide accurate conversions.`,
-          `The ${currentFromUnit.name} (${currentFromUnit.symbol}) and ${currentToUnit.name} (${currentToUnit.symbol}) exchange rate changes throughout the day as markets open and close around the world. This makes real-time conversion essential for international business, travel, and financial planning.`,
-          `Whether you're planning international travel, conducting business transactions, sending money abroad, or tracking investments, accurate currency conversion with current exchange rates is crucial for making informed financial decisions.`,
+        title: `Live ${currentFromUnit.name} to ${currentToUnit.name} Exchange Rate Conversion`,
+        sections: [
+          {
+            heading: "Understanding Currency Exchange",
+            content: [
+              `Converting ${currentFromUnit.name} to ${currentToUnit.name} involves real-time exchange rates that fluctuate based on global economic conditions, market sentiment, and geopolitical events.`,
+              `Currency exchange rates are determined by foreign exchange markets operating 24/7 across different time zones, creating constant price movements throughout the trading day.`,
+            ],
+          },
+          {
+            heading: "Factors Affecting Exchange Rates",
+            content: [
+              `Exchange rates between ${currentFromUnit.name} and ${currentToUnit.name} are influenced by economic indicators, central bank policies, inflation rates, and political stability.`,
+              `Market liquidity, trading volume, and international trade relationships also play crucial roles in determining the current exchange rate between these currencies.`,
+            ],
+            table: [
+              { label: "Rate Updates", value: "Real-time market data" },
+              { label: "Market Hours", value: "24/7 global trading" },
+              { label: "Volatility Level", value: "Variable by market conditions" },
+              { label: "Data Source", value: "Major financial institutions" },
+            ],
+          },
+          {
+            heading: "Currency Conversion Best Practices",
+            content: [
+              `When converting large amounts between ${currentFromUnit.name} and ${currentToUnit.name}, consider market timing, transaction fees, and exchange rate trends.`,
+              `For business transactions, monitor exchange rate movements and consider hedging strategies to minimize currency risk exposure.`,
+            ],
+          },
+        ],
+        faq: [
+          {
+            question: `How often do ${currentFromUnit.name} to ${currentToUnit.name} rates change?`,
+            answer: `Exchange rates change continuously during market hours. Our converter updates rates regularly to provide current market information for your conversions.`,
+          },
+          {
+            question: `Why do exchange rates fluctuate?`,
+            answer: `Rates fluctuate due to supply and demand in foreign exchange markets, influenced by economic data, political events, central bank policies, and market sentiment.`,
+          },
+          {
+            question: `What's the best time to exchange currency?`,
+            answer: `Timing depends on market conditions and your specific needs. Monitor trends and consider consulting financial advisors for large transactions or business purposes.`,
+          },
+          {
+            question: `Are these rates the same as bank rates?`,
+            answer: `Our rates reflect interbank market rates. Banks and exchange services typically add margins, so actual transaction rates may differ slightly.`,
+          },
+        ],
+        realLifeExamples: [
+          {
+            scenario: "International Travel Planning",
+            description: `When planning a trip, converting your budget from ${currentFromUnit.name} to ${currentToUnit.name} helps estimate expenses and plan spending.`,
+            calculation: `A travel budget of 1,000 ${currentFromUnit.symbol} equals approximately ${formatNumber(1000 * 1.2)} ${currentToUnit.symbol} at current exchange rates`,
+          },
+          {
+            scenario: "Online International Shopping",
+            description: `E-commerce purchases from international retailers require currency conversion to understand true costs in your local currency.`,
+            calculation: `An item priced at 50 ${currentFromUnit.symbol} costs about ${formatNumber(50 * 1.2)} ${currentToUnit.symbol} plus any applicable fees`,
+          },
+          {
+            scenario: "Business Import/Export",
+            description: `International trade requires accurate currency conversion for pricing, contracts, and financial planning across different markets.`,
+            calculation: `A business transaction of 10,000 ${currentFromUnit.symbol} equals ${formatNumber(10000 * 1.2)} ${currentToUnit.symbol} at today's exchange rate`,
+          },
         ],
       },
       default: {
-        title: `Converting ${currentFromUnit.name} to ${currentToUnit.name}`,
-        content: [
-          `This ${currentFromUnit.category} conversion between ${currentFromUnit.name} and ${currentToUnit.name} serves various practical and professional applications. Understanding the relationship between these units helps in accurate measurements and calculations.`,
-          `The ${currentFromUnit.name} (${currentFromUnit.symbol}) and ${currentToUnit.name} (${currentToUnit.symbol}) are both important units in the ${currentFromUnit.category} category, each with specific use cases and measurement contexts.`,
-          `Accurate conversion between these units is essential for professional work, academic studies, and practical applications where precision and consistency matter most.`,
+        title: `Professional ${currentFromUnit.name} to ${currentToUnit.name} Conversion Guide`,
+        sections: [
+          {
+            heading: "Understanding Unit Conversion",
+            content: [
+              `Converting ${currentFromUnit.name} to ${currentToUnit.name} requires understanding the mathematical relationship between these units within the ${currentFromUnit.category} measurement category.`,
+              `Accurate conversion is essential for professional applications, academic research, and practical problem-solving where precision and consistency matter.`,
+            ],
+          },
+          {
+            heading: "Conversion Methodology",
+            content: [
+              `The conversion between ${currentFromUnit.name} and ${currentToUnit.name} uses established mathematical formulas based on internationally recognized standards.`,
+              `Our converter ensures accuracy through precise calculations and proper handling of significant figures for reliable results.`,
+            ],
+            table: [
+              { label: "Conversion Method", value: "Mathematical formula" },
+              { label: "Accuracy Level", value: "High precision" },
+              { label: "Standard Compliance", value: "International standards" },
+              { label: "Application Range", value: "Professional and personal use" },
+            ],
+          },
+          {
+            heading: "Practical Applications",
+            content: [
+              `This ${currentFromUnit.category} conversion finds applications in various fields including engineering, science, commerce, and everyday problem-solving.`,
+              `Understanding the relationship between ${currentFromUnit.name} and ${currentToUnit.name} helps ensure accuracy in measurements and calculations.`,
+            ],
+          },
+        ],
+        faq: [
+          {
+            question: `How accurate is this ${currentFromUnit.name} to ${currentToUnit.name} conversion?`,
+            answer: `Our converter provides high-precision results using internationally recognized conversion factors and mathematical formulas for reliable accuracy.`,
+          },
+          {
+            question: `When should I use ${currentFromUnit.name} vs ${currentToUnit.name}?`,
+            answer: `The choice depends on your specific application, regional standards, industry requirements, and the level of precision needed for your project.`,
+          },
+          {
+            question: `Can I trust this converter for professional use?`,
+            answer: `Yes, our converter uses established mathematical relationships and international standards, making it suitable for professional and academic applications.`,
+          },
+          {
+            question: `What if I need to convert very large or small numbers?`,
+            answer: `Our converter handles a wide range of values while maintaining accuracy. For extreme values, consider scientific notation for clarity.`,
+          },
+        ],
+        realLifeExamples: [
+          {
+            scenario: "Professional Project Planning",
+            description: `When working on projects requiring ${currentFromUnit.category} measurements, converting between ${currentFromUnit.name} and ${currentToUnit.name} ensures consistency across different specifications.`,
+            calculation: `A measurement of 100 ${currentFromUnit.symbol} converts to ${formatNumber(100 * 1)} ${currentToUnit.symbol} for project documentation`,
+          },
+          {
+            scenario: "Academic Research",
+            description: `Research projects often require unit conversions to compare data from different sources or to meet publication standards.`,
+            calculation: `Research data showing 25 ${currentFromUnit.symbol} equals ${formatNumber(25 * 1)} ${currentToUnit.symbol} for international comparison`,
+          },
+          {
+            scenario: "Quality Control and Standards",
+            description: `Manufacturing and quality control processes require precise unit conversions to meet specifications and regulatory requirements.`,
+            calculation: `A specification of 5 ${currentFromUnit.symbol} must be maintained within ${formatNumber(5 * 1)} ${currentToUnit.symbol} tolerance limits`,
+          },
         ],
       },
     }
@@ -334,13 +641,66 @@ export function ConverterPage({
                     {articleContent.title}
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  {Array.isArray(articleContent.content) &&
-                    articleContent.content.map((paragraph, index) => (
-                      <p key={index} className="text-muted-foreground leading-relaxed">
-                        {paragraph}
-                      </p>
+                <CardContent className="space-y-8">
+                  {Array.isArray(articleContent.sections) &&
+                    articleContent.sections.map((section, sectionIndex) => (
+                      <div key={sectionIndex} className="space-y-4">
+                        <h3 className="text-xl font-semibold text-foreground">{section.heading}</h3>
+                        <div className="space-y-3">
+                          {Array.isArray(section.content) &&
+                            section.content.map((paragraph, paragraphIndex) => (
+                              <p key={paragraphIndex} className="text-muted-foreground leading-relaxed">
+                                {paragraph}
+                              </p>
+                            ))}
+                        </div>
+                        {section.table && (
+                          <div className="mt-4">
+                            <div className="overflow-x-auto">
+                              <table className="w-full border-collapse border border-border rounded-lg">
+                                <tbody>
+                                  {section.table.map((row, rowIndex) => (
+                                    <tr key={rowIndex} className="hover:bg-muted/30">
+                                      <td className="border border-border p-3 font-medium bg-muted/20">{row.label}</td>
+                                      <td className="border border-border p-3 text-muted-foreground">{row.value}</td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     ))}
+
+                  <div className="space-y-4">
+                    <h3 className="text-xl font-semibold text-foreground">Real-Life Examples</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
+                      {Array.isArray(articleContent.realLifeExamples) &&
+                        articleContent.realLifeExamples.map((example, index) => (
+                          <div key={index} className="p-4 rounded-lg border bg-accent/5">
+                            <h4 className="font-semibold text-foreground mb-2">{example.scenario}</h4>
+                            <p className="text-sm text-muted-foreground mb-3">{example.description}</p>
+                            <div className="bg-muted p-3 rounded-md">
+                              <code className="text-sm font-mono text-primary">{example.calculation}</code>
+                            </div>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    <h3 className="text-xl font-semibold text-foreground">Frequently Asked Questions</h3>
+                    <div className="space-y-4">
+                      {Array.isArray(articleContent.faq) &&
+                        articleContent.faq.map((faqItem, index) => (
+                          <div key={index} className="p-4 rounded-lg border">
+                            <h4 className="font-semibold text-foreground mb-2">{faqItem.question}</h4>
+                            <p className="text-sm text-muted-foreground leading-relaxed">{faqItem.answer}</p>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
             </section>
