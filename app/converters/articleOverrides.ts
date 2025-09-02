@@ -1,6 +1,7 @@
 export interface ArticleOverride {
   title: string
-  sections: {
+  html?: string // Added optional html field for raw HTML content
+  sections?: {
     heading: string
     content: string[]
     table?: {
@@ -8,11 +9,11 @@ export interface ArticleOverride {
       rows: string[][]
     }
   }[]
-  faq: {
+  faq?: {
     question: string
     answer: string
   }[]
-  realLifeExamples: {
+  realLifeExamples?: {
     title: string
     description: string
     calculation: string

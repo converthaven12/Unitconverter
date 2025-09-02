@@ -16,6 +16,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { convertUnits, formatNumber } from "@/lib/conversion-engine"
 import { getUnitsByCategory } from "@/lib/units-registry"
 import type { SerializableUnit, SerializableConverter } from "@/lib/types"
+import type { ArticleOverride } from "@/app/converters/articleOverrides"
 
 interface ConverterPageProps {
   fromUnit: SerializableUnit
@@ -24,6 +25,7 @@ interface ConverterPageProps {
   relatedConverters: SerializableConverter[]
   reverseConverter: SerializableConverter
   useCases: string[]
+  customArticle?: ArticleOverride // Added customArticle prop for article overrides
 }
 
 export function ConverterPage({
@@ -33,6 +35,7 @@ export function ConverterPage({
   relatedConverters = [], // Added default empty array
   reverseConverter,
   useCases = [], // Added default empty array
+  customArticle, // Added customArticle parameter
 }: ConverterPageProps) {
   const [inputValue, setInputValue] = useState("1")
   const [result, setResult] = useState("")
@@ -472,7 +475,7 @@ export function ConverterPage({
     return categoryArticles[currentFromUnit.category] || categoryArticles.default
   }
 
-  const articleContent = generateArticleContent()
+  const articleContent = customArticle || generateArticleContent()
 
   const generateConversionTable = async () => {
     const baseValues = [0.1, 0.5, 1, 2, 5, 10, 25, 50, 100, 500, 1000]
@@ -668,65 +671,152 @@ export function ConverterPage({
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-8">
-                  {Array.isArray(articleContent.sections) &&
-                    articleContent.sections.map((section, sectionIndex) => (
-                      <div key={sectionIndex} className="space-y-4">
-                        <h3 className="text-xl font-semibold text-foreground">{section.heading}</h3>
-                        <div className="space-y-3">
-                          {Array.isArray(section.content) &&
-                            section.content.map((paragraph, paragraphIndex) => (
+                  {customArticle?.html ? (
+                    <div dangerouslySetInnerHTML={{ __html: customArticle.html }} />
+                  ) : customArticle?.sections ? (
+                    <>
+                      {customArticle.sections.map((section, sectionIndex) => (
+                        <div key={sectionIndex} className="space-y-4">
+                          <h2 className="text-xl font-semibold text-foreground">{section.heading}</h2>
+                          <div className="space-y-3">
+                            {section.content.map((paragraph, paragraphIndex) => (
                               <p key={paragraphIndex} className="text-muted-foreground leading-relaxed">
                                 {paragraph}
                               </p>
                             ))}
-                        </div>
-                        {section.table && (
-                          <div className="mt-4">
-                            <div className="overflow-x-auto">
-                              <table className="w-full border-collapse border border-border rounded-lg">
-                                <tbody>
-                                  {section.table.map((row, rowIndex) => (
-                                    <tr key={rowIndex} className="hover:bg-muted/30">
-                                      <td className="border border-border p-3 font-medium bg-muted/20">{row.label}</td>
-                                      <td className="border border-border p-3 text-muted-foreground">{row.value}</td>
+                          </div>
+                          {section.table && (
+                            <div className="mt-4">
+                              <div className="overflow-x-auto">
+                                <table className="w-full border-collapse border border-border rounded-lg">
+                                  <thead>
+                                    <tr className="bg-muted/50">
+                                      {section.table.headers.map((header, headerIndex) => (
+                                        <th
+                                          key={headerIndex}
+                                          className="border border-border p-3 text-left font-semibold"
+                                        >
+                                          {header}
+                                        </th>
+                                      ))}
                                     </tr>
-                                  ))}
-                                </tbody>
-                              </table>
+                                  </thead>
+                                  <tbody>
+                                    {section.table.rows.map((row, rowIndex) => (
+                                      <tr key={rowIndex} className="hover:bg-muted/30">
+                                        {row.map((cell, cellIndex) => (
+                                          <td key={cellIndex} className="border border-border p-3">
+                                            {cell}
+                                          </td>
+                                        ))}
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </table>
+                              </div>
                             </div>
+                          )}
+                        </div>
+                      ))}
+
+                      {customArticle.realLifeExamples && (
+                        <div className="space-y-4">
+                          <h2 className="text-xl font-semibold text-foreground">Real-Life Examples</h2>
+                          <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
+                            {customArticle.realLifeExamples.map((example, index) => (
+                              <div key={index} className="p-4 rounded-lg border bg-accent/5">
+                                <h4 className="font-semibold text-foreground mb-2">{example.title}</h4>
+                                <p className="text-sm text-muted-foreground mb-3">{example.description}</p>
+                                <div className="bg-muted p-3 rounded-md">
+                                  <code className="text-sm font-mono text-primary">{example.calculation}</code>
+                                </div>
+                              </div>
+                            ))}
                           </div>
-                        )}
+                        </div>
+                      )}
+
+                      {customArticle.faq && (
+                        <div className="space-y-4">
+                          <h2 className="text-xl font-semibold text-foreground">Frequently Asked Questions</h2>
+                          <div className="space-y-4">
+                            {customArticle.faq.map((faqItem, index) => (
+                              <div key={index} className="p-4 rounded-lg border">
+                                <h4 className="font-semibold text-foreground mb-2">{faqItem.question}</h4>
+                                <p className="text-sm text-muted-foreground leading-relaxed">{faqItem.answer}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      {Array.isArray(articleContent.sections) &&
+                        articleContent.sections.map((section, sectionIndex) => (
+                          <div key={sectionIndex} className="space-y-4">
+                            <h3 className="text-xl font-semibold text-foreground">{section.heading}</h3>
+                            <div className="space-y-3">
+                              {Array.isArray(section.content) &&
+                                section.content.map((paragraph, paragraphIndex) => (
+                                  <p key={paragraphIndex} className="text-muted-foreground leading-relaxed">
+                                    {paragraph}
+                                  </p>
+                                ))}
+                            </div>
+                            {section.table && (
+                              <div className="mt-4">
+                                <div className="overflow-x-auto">
+                                  <table className="w-full border-collapse border border-border rounded-lg">
+                                    <tbody>
+                                      {section.table.map((row, rowIndex) => (
+                                        <tr key={rowIndex} className="hover:bg-muted/30">
+                                          <td className="border border-border p-3 font-medium bg-muted/20">
+                                            {row.label}
+                                          </td>
+                                          <td className="border border-border p-3 text-muted-foreground">
+                                            {row.value}
+                                          </td>
+                                        </tr>
+                                      ))}
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        ))}
+
+                      <div className="space-y-4">
+                        <h3 className="text-xl font-semibold text-foreground">Real-Life Examples</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
+                          {Array.isArray(articleContent.realLifeExamples) &&
+                            articleContent.realLifeExamples.map((example, index) => (
+                              <div key={index} className="p-4 rounded-lg border bg-accent/5">
+                                <h4 className="font-semibold text-foreground mb-2">{example.scenario}</h4>
+                                <p className="text-sm text-muted-foreground mb-3">{example.description}</p>
+                                <div className="bg-muted p-3 rounded-md">
+                                  <code className="text-sm font-mono text-primary">{example.calculation}</code>
+                                </div>
+                              </div>
+                            ))}
+                        </div>
                       </div>
-                    ))}
 
-                  <div className="space-y-4">
-                    <h3 className="text-xl font-semibold text-foreground">Real-Life Examples</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
-                      {Array.isArray(articleContent.realLifeExamples) &&
-                        articleContent.realLifeExamples.map((example, index) => (
-                          <div key={index} className="p-4 rounded-lg border bg-accent/5">
-                            <h4 className="font-semibold text-foreground mb-2">{example.scenario}</h4>
-                            <p className="text-sm text-muted-foreground mb-3">{example.description}</p>
-                            <div className="bg-muted p-3 rounded-md">
-                              <code className="text-sm font-mono text-primary">{example.calculation}</code>
-                            </div>
-                          </div>
-                        ))}
-                    </div>
-                  </div>
-
-                  <div className="space-y-4">
-                    <h3 className="text-xl font-semibold text-foreground">Frequently Asked Questions</h3>
-                    <div className="space-y-4">
-                      {Array.isArray(articleContent.faq) &&
-                        articleContent.faq.map((faqItem, index) => (
-                          <div key={index} className="p-4 rounded-lg border">
-                            <h4 className="font-semibold text-foreground mb-2">{faqItem.question}</h4>
-                            <p className="text-sm text-muted-foreground leading-relaxed">{faqItem.answer}</p>
-                          </div>
-                        ))}
-                    </div>
-                  </div>
+                      <div className="space-y-4">
+                        <h3 className="text-xl font-semibold text-foreground">Frequently Asked Questions</h3>
+                        <div className="space-y-4">
+                          {Array.isArray(articleContent.faq) &&
+                            articleContent.faq.map((faqItem, index) => (
+                              <div key={index} className="p-4 rounded-lg border">
+                                <h4 className="font-semibold text-foreground mb-2">{faqItem.question}</h4>
+                                <p className="text-sm text-muted-foreground leading-relaxed">{faqItem.answer}</p>
+                              </div>
+                            ))}
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </CardContent>
               </Card>
             </section>
