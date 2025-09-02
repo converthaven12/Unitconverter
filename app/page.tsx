@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { Calculator, ArrowRight, Zap, Target, Globe, BookOpen } from "lucide-react"
 import Script from "next/script"
+import type { Metadata } from "next"
 
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { UnitConverterSidebar } from "@/components/unit-converter-sidebar"
@@ -11,6 +12,32 @@ import { Separator } from "@/components/ui/separator"
 
 import { popularPairs, categories, getUnitsByCategory } from "@/lib/units-registry"
 import { FeaturedConverter } from "@/components/featured-converter"
+
+export const metadata: Metadata = {
+  title: "Unit Converter - Convert Any Unit Instantly | 150+ Units, 27 Categories",
+  description:
+    "Professional unit converter supporting 27 categories and 150+ units. Convert between metric, imperial, and specialized units instantly with accurate results and detailed explanations.",
+  keywords:
+    "unit converter, metric conversion, imperial conversion, length converter, weight converter, temperature converter, measurement converter",
+  openGraph: {
+    title: "Unit Converter - Convert Any Unit Instantly",
+    description:
+      "Professional unit converter supporting 27 categories and 150+ units. Convert between metric, imperial, and specialized units instantly.",
+    url: "https://unit-converter.vercel.app",
+    siteName: "Unit Converter",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Unit Converter - Convert Any Unit Instantly",
+    description:
+      "Professional unit converter supporting 27 categories and 150+ units. Convert between metric, imperial, and specialized units instantly.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+}
 
 const homePageStructuredData = {
   "@context": "https://schema.org",
@@ -62,7 +89,8 @@ export default function HomePage() {
                 <div className="space-y-4">
                   <h1 className="text-4xl font-bold tracking-tight text-balance">Convert Any Unit Instantly</h1>
                   <p className="text-xl text-muted-foreground text-pretty max-w-2xl mx-auto">
-                    Professional-grade unit converter supporting 27 categories and 150+ units. From metric to imperial, scientific to everyday measurements.
+                    Professional-grade unit converter supporting 27 categories and 150+ units. From metric to imperial,
+                    scientific to everyday measurements.
                   </p>
                 </div>
 

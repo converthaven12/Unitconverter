@@ -18,7 +18,15 @@ function parseSlug(slug: string): { fromUnitId: string; toUnitId: string } | nul
   if (!match) return null
 
   const [, fromUnitId, toUnitId] = match
-  return { fromUnitId, toUnitId }
+
+  const normalizeUnitId = (id: string) => {
+    return id.replace(/_/g, "_").toLowerCase()
+  }
+
+  return {
+    fromUnitId: normalizeUnitId(fromUnitId),
+    toUnitId: normalizeUnitId(toUnitId),
+  }
 }
 
 // Generate static params for popular conversions
@@ -109,6 +117,7 @@ export default async function ConverterPageRoute({ params }: PageProps) {
   const parsed = parseSlug(slug)
 
   if (!parsed) {
+    console.log("[v0] Invalid slug format:", slug)
     notFound()
   }
 
@@ -116,7 +125,18 @@ export default async function ConverterPageRoute({ params }: PageProps) {
   const fromUnit = getUnitById(fromUnitId)
   const toUnit = getUnitById(toUnitId)
 
-  if (!fromUnit || !toUnit || fromUnit.category !== toUnit.category) {
+  if (!fromUnit) {
+    console.log("[v0] From unit not found:", fromUnitId)
+    notFound()
+  }
+
+  if (!toUnit) {
+    console.log("[v0] To unit not found:", toUnitId)
+    notFound()
+  }
+
+  if (fromUnit.category !== toUnit.category) {
+    console.log("[v0] Category mismatch:", fromUnit.category, "vs", toUnit.category)
     notFound()
   }
 
