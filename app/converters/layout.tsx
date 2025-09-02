@@ -1,6 +1,7 @@
 "use client";
 
-import { SidebarProvider } from "@/components/sidebar"; 
+// use relative path instead of '@/...'
+import { SidebarProvider } from "../../components/sidebar";
 
 export default function ConvertersLayout({
   children,
