@@ -7,6 +7,7 @@ import { generateCanonicalUrl, generateKeywords } from "@/lib/seo-utils"
 import { ConverterPage } from "@/components/converter-page"
 import { StructuredData } from "@/components/structured-data"
 import type { SerializableUnit, SerializableConverter } from "@/lib/types"
+import { units } from "@/lib/units-registry" // Added import for units
 
 interface PageProps {
   params: Promise<{ slug: string }>
@@ -20,7 +21,7 @@ function parseSlug(slug: string): { fromUnitId: string; toUnitId: string } | nul
   const [, fromUnitId, toUnitId] = match
 
   const normalizeUnitId = (id: string) => {
-    return id.replace(/_/g, "_").toLowerCase()
+    return id.replace(/-/g, "_").toLowerCase()
   }
 
   return {
@@ -122,16 +123,19 @@ export default async function ConverterPageRoute({ params }: PageProps) {
   }
 
   const { fromUnitId, toUnitId } = parsed
+
+  console.log("[v0] Parsed slug:", slug, "->", { fromUnitId, toUnitId })
+
   const fromUnit = getUnitById(fromUnitId)
   const toUnit = getUnitById(toUnitId)
 
   if (!fromUnit) {
-    console.log("[v0] From unit not found:", fromUnitId)
+    console.log("[v0] From unit not found:", fromUnitId, "Available units:", units.map((u) => u.id).slice(0, 10))
     notFound()
   }
 
   if (!toUnit) {
-    console.log("[v0] To unit not found:", toUnitId)
+    console.log("[v0] To unit not found:", toUnitId, "Available units:", units.map((u) => u.id).slice(0, 10))
     notFound()
   }
 
@@ -139,6 +143,8 @@ export default async function ConverterPageRoute({ params }: PageProps) {
     console.log("[v0] Category mismatch:", fromUnit.category, "vs", toUnit.category)
     notFound()
   }
+
+  console.log("[v0] Successfully found converter:", fromUnit.name, "to", toUnit.name)
 
   // Get quick examples
   const examples = getQuickExamples(fromUnitId, toUnitId)
