@@ -5,12 +5,12 @@ import { Suspense } from "react"
 import "./globals.css"
 import { Footer } from "@/components/footer"
 
-export const metadata: Metadata = {
-  title: "Unit Converter - Convert Between Any Units Instantly",
+export const metadata = {
   description:
-    "Professional unit converter supporting length, weight, temperature, volume, and 20+ categories. Convert between metric, imperial, and specialized units with accurate formulas.",
+    "Effortlessly convert over 150 units across 27 categories with our professional unit converter. Get instant, accurate results for metric, imperial, and specialized units!",
   generator: "v0.app",
 }
+
 
 export default function RootLayout({
   children,
