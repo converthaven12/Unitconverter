@@ -4,7 +4,7 @@ export default function GuideArticle() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Complete Guide: Centimeter to Inch Conversion</CardTitle>
+        <CardTitle>Complete Guide: Centimet to Inch Conversion</CardTitle>
       </CardHeader>
       <CardContent className="prose max-w-none">
         <h2 className="text-xl font-semibold mb-4">Understanding Centimeters and Inches</h2>
