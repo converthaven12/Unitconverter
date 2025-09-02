@@ -1,6 +1,7 @@
 // Core Conversion Engine - Handles all unit conversions using base-unit model
 
 import { getUnitById, type Unit } from "./units-registry"
+import { getExchangeRates, convertCurrency } from "./currency-api"
 
 export interface ConversionResult {
   value: number
@@ -11,7 +12,7 @@ export interface ConversionResult {
   error?: string
 }
 
-export function convertUnits(value: number, fromUnitId: string, toUnitId: string): ConversionResult {
+export async function convertUnits(value: number, fromUnitId: string, toUnitId: string): Promise<ConversionResult> {
   const fromUnit = getUnitById(fromUnitId)
   const toUnit = getUnitById(toUnitId)
 
@@ -50,12 +51,19 @@ export function convertUnits(value: number, fromUnitId: string, toUnitId: string
   }
 
   try {
-    // Convert: input → base unit → target unit
-    const baseValue = fromUnit.toBase(value)
-    const convertedValue = toUnit.fromBase(baseValue)
+    let convertedValue: number
+
+    if (fromUnit.category === "currency") {
+      const rates = await getExchangeRates()
+      convertedValue = convertCurrency(value, fromUnit.id, toUnit.id, rates)
+    } else {
+      // Standard conversion for non-currency units
+      const baseValue = fromUnit.toBase(value)
+      convertedValue = toUnit.fromBase(baseValue)
+    }
 
     // Generate formula description
-    const formula = generateFormula(fromUnit, toUnit, value)
+    const formula = await generateFormula(fromUnit, toUnit, value)
 
     return {
       value: convertedValue,
@@ -71,12 +79,27 @@ export function convertUnits(value: number, fromUnitId: string, toUnitId: string
       toUnit,
       formula: "",
       isValid: false,
-      error: "Conversion calculation failed",
+      error: error instanceof Error ? error.message : "Conversion calculation failed",
     }
   }
 }
 
-function generateFormula(fromUnit: Unit, toUnit: Unit, inputValue: number): string {
+async function generateFormula(fromUnit: Unit, toUnit: Unit, inputValue: number): Promise<string> {
+  if (fromUnit.category === "currency") {
+    try {
+      const rates = await getExchangeRates()
+      const fromRate = rates[fromUnit.id.toUpperCase()]
+      const toRate = rates[toUnit.id.toUpperCase()]
+
+      if (fromRate && toRate) {
+        const exchangeRate = toRate / fromRate
+        return `1 ${fromUnit.symbol} = ${exchangeRate.toFixed(4)} ${toUnit.symbol}`
+      }
+    } catch (error) {
+      return `${toUnit.symbol} = ${fromUnit.symbol} × Exchange Rate`
+    }
+  }
+
   // Special cases for temperature (offset conversions)
   if (fromUnit.category === "temperature") {
     if (fromUnit.id === "celsius" && toUnit.id === "fahrenheit") {
@@ -159,15 +182,21 @@ function generateFormula(fromUnit: Unit, toUnit: Unit, inputValue: number): stri
   }
 }
 
-export function getQuickExamples(fromUnitId: string, toUnitId: string): Array<{ input: number; output: number }> {
+export async function getQuickExamples(
+  fromUnitId: string,
+  toUnitId: string,
+): Promise<Array<{ input: number; output: number }>> {
   const examples = [1, 10, 100]
-  return examples.map((input) => {
-    const result = convertUnits(input, fromUnitId, toUnitId)
-    return {
-      input,
-      output: result.isValid ? result.value : 0,
-    }
-  })
+  const results = await Promise.all(
+    examples.map(async (input) => {
+      const result = await convertUnits(input, fromUnitId, toUnitId)
+      return {
+        input,
+        output: result.isValid ? result.value : 0,
+      }
+    }),
+  )
+  return results
 }
 
 export function formatNumber(value: number, precision = 6): string {

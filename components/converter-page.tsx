@@ -39,6 +39,7 @@ export function ConverterPage({
   const [formula, setFormula] = useState("")
   const [selectedFromUnit, setSelectedFromUnit] = useState(fromUnit.id)
   const [selectedToUnit, setSelectedToUnit] = useState(toUnit.id)
+  const [isLoading, setIsLoading] = useState(false)
 
   const categoryUnits = getUnitsByCategory(fromUnit.category)
   const currentFromUnit = categoryUnits.find((unit) => unit.id === selectedFromUnit) || {
@@ -55,16 +56,30 @@ export function ConverterPage({
   }
 
   useEffect(() => {
-    const value = Number.parseFloat(inputValue) || 0
-    const conversion = convertUnits(value, selectedFromUnit, selectedToUnit)
+    const performConversion = async () => {
+      const value = Number.parseFloat(inputValue) || 0
+      setIsLoading(true)
 
-    if (conversion.isValid) {
-      setResult(formatNumber(conversion.value))
-      setFormula(conversion.formula)
-    } else {
-      setResult("0")
-      setFormula("")
+      try {
+        const conversion = await convertUnits(value, selectedFromUnit, selectedToUnit)
+
+        if (conversion.isValid) {
+          setResult(formatNumber(conversion.value))
+          setFormula(conversion.formula)
+        } else {
+          setResult("0")
+          setFormula("")
+        }
+      } catch (error) {
+        console.error("Conversion error:", error)
+        setResult("Error")
+        setFormula("")
+      } finally {
+        setIsLoading(false)
+      }
     }
+
+    performConversion()
   }, [inputValue, selectedFromUnit, selectedToUnit])
 
   const handleSwap = () => {
@@ -107,6 +122,14 @@ export function ConverterPage({
           `Whether you're following international recipes, understanding weather forecasts, or conducting scientific experiments, accurate temperature conversion ensures safety and precision in your work.`,
         ],
       },
+      currency: {
+        title: `${currentFromUnit.name} to ${currentToUnit.name}: Live Currency Exchange`,
+        content: [
+          `Converting ${currentFromUnit.name} to ${currentToUnit.name} requires real-time exchange rates that fluctuate based on global financial markets, economic conditions, and geopolitical events. Our converter uses live exchange rate data to provide accurate conversions.`,
+          `The ${currentFromUnit.name} (${currentFromUnit.symbol}) and ${currentToUnit.name} (${currentToUnit.symbol}) exchange rate changes throughout the day as markets open and close around the world. This makes real-time conversion essential for international business, travel, and financial planning.`,
+          `Whether you're planning international travel, conducting business transactions, sending money abroad, or tracking investments, accurate currency conversion with current exchange rates is crucial for making informed financial decisions.`,
+        ],
+      },
       default: {
         title: `Converting ${currentFromUnit.name} to ${currentToUnit.name}`,
         content: [
@@ -122,18 +145,29 @@ export function ConverterPage({
 
   const articleContent = generateArticleContent()
 
-  const generateConversionTable = () => {
+  const generateConversionTable = async () => {
     const baseValues = [0.1, 0.5, 1, 2, 5, 10, 25, 50, 100, 500, 1000]
-    return baseValues.map((value) => {
-      const conversion = convertUnits(value, selectedFromUnit, selectedToUnit)
-      return {
-        input: value,
-        output: conversion.isValid ? conversion.value : 0,
-      }
-    })
+    const results = await Promise.all(
+      baseValues.map(async (value) => {
+        const conversion = await convertUnits(value, selectedFromUnit, selectedToUnit)
+        return {
+          input: value,
+          output: conversion.isValid ? conversion.value : 0,
+        }
+      }),
+    )
+    return results
   }
 
-  const conversionTableData = generateConversionTable()
+  const [conversionTableData, setConversionTableData] = useState<Array<{ input: number; output: number }>>([])
+
+  useEffect(() => {
+    const updateTable = async () => {
+      const tableData = await generateConversionTable()
+      setConversionTableData(tableData)
+    }
+    updateTable()
+  }, [selectedFromUnit, selectedToUnit])
 
   return (
     <SidebarProvider>
@@ -163,8 +197,9 @@ export function ConverterPage({
                   Convert {currentFromUnit.name} to {currentToUnit.name}
                 </h1>
                 <p className="text-lg text-muted-foreground text-pretty">
-                  Instant conversion between {currentFromUnit.symbol} and {currentToUnit.symbol} with accurate formulas
-                  and examples
+                  {currentFromUnit.category === "currency"
+                    ? `Live exchange rates for ${currentFromUnit.symbol} to ${currentToUnit.symbol} conversion with real-time market data`
+                    : `Instant conversion between ${currentFromUnit.symbol} and ${currentToUnit.symbol} with accurate formulas and examples`}
                 </p>
               </div>
 
@@ -175,6 +210,11 @@ export function ConverterPage({
                 <Badge variant="outline">
                   {currentFromUnit.symbol} → {currentToUnit.symbol}
                 </Badge>
+                {currentFromUnit.category === "currency" && (
+                  <Badge variant="default" className="bg-green-500 hover:bg-green-600">
+                    Live Rates
+                  </Badge>
+                )}
               </div>
             </section>
 
@@ -186,7 +226,11 @@ export function ConverterPage({
                     <Calculator className="size-5" />
                     {currentFromUnit.name} to {currentToUnit.name} Converter
                   </CardTitle>
-                  <CardDescription>Enter a value and select units to convert instantly</CardDescription>
+                  <CardDescription>
+                    {currentFromUnit.category === "currency"
+                      ? "Enter amount and get live exchange rate conversion"
+                      : "Enter a value and select units to convert instantly"}
+                  </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
@@ -230,7 +274,7 @@ export function ConverterPage({
                       <label className="text-sm font-medium">To</label>
                       <div className="space-y-2">
                         <div className="flex items-center h-10 px-3 rounded-md border bg-muted text-lg font-mono">
-                          {result}
+                          {isLoading ? "Loading..." : result}
                         </div>
                         <Select value={selectedToUnit} onValueChange={handleToUnitChange}>
                           <SelectTrigger>
@@ -259,11 +303,16 @@ export function ConverterPage({
                       <div className="space-y-3">
                         <h4 className="font-medium flex items-center gap-2">
                           <BookOpen className="size-4" />
-                          Conversion Formula
+                          {currentFromUnit.category === "currency" ? "Current Exchange Rate" : "Conversion Formula"}
                         </h4>
                         <div className="bg-muted p-3 rounded-md">
                           <code className="text-sm font-mono">{formula}</code>
                         </div>
+                        {currentFromUnit.category === "currency" && (
+                          <p className="text-xs text-muted-foreground">
+                            * Exchange rates are updated regularly and may vary from actual market rates
+                          </p>
+                        )}
                       </div>
                     </>
                   )}

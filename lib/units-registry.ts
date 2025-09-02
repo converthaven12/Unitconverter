@@ -10,7 +10,7 @@ export interface Unit {
   aliases?: string[]
 }
 
-export interface UnitCategory {
+export interface Category {
   id: string
   name: string
   baseUnit: string
@@ -24,39 +24,39 @@ const fahrenheitToKelvin = (f: number) => ((f - 32) * 5) / 9 + 273.15
 const kelvinToFahrenheit = (k: number) => ((k - 273.15) * 9) / 5 + 32
 
 // Categories definition
-export const categories: UnitCategory[] = [
+export const categories: Category[] = [
   { id: "length", name: "Length", baseUnit: "meter", description: "Distance and length measurements" },
   { id: "area", name: "Area", baseUnit: "square_meter", description: "Surface area measurements" },
   { id: "volume", name: "Volume", baseUnit: "liter", description: "Volume and capacity measurements" },
   { id: "weight", name: "Weight & Mass", baseUnit: "kilogram", description: "Mass and weight measurements" },
-  { id: "temperature", name: "Temperature", baseUnit: "kelvin", description: "Temperature measurements" },
+  { id: "temperature", name: "Temperature", baseUnit: "celsius", description: "Temperature measurements" },
   { id: "time", name: "Time", baseUnit: "second", description: "Time duration measurements" },
   { id: "speed", name: "Speed", baseUnit: "meter_per_second", description: "Velocity and speed measurements" },
-  { id: "pressure", name: "Pressure", baseUnit: "pascal", description: "Pressure and stress measurements" },
-  { id: "energy", name: "Energy", baseUnit: "joule", description: "Energy and work measurements" },
-  { id: "power", name: "Power", baseUnit: "watt", description: "Power and energy rate measurements" },
+  { id: "pressure", name: "Pressure", baseUnit: "pascal", description: "Pressure measurements" },
+  { id: "energy", name: "Energy", baseUnit: "joule", description: "Energy measurements" },
+  { id: "power", name: "Power", baseUnit: "watt", description: "Power measurements" },
   { id: "data", name: "Data Storage", baseUnit: "byte", description: "Digital storage measurements" },
-  { id: "angle", name: "Angle", baseUnit: "radian", description: "Angular measurements" },
-  { id: "frequency", name: "Frequency", baseUnit: "hertz", description: "Frequency and periodic measurements" },
+  { id: "angle", name: "Angle", baseUnit: "degree", description: "Angular measurements" },
+  { id: "frequency", name: "Frequency", baseUnit: "hertz", description: "Frequency measurements" },
   { id: "fuel", name: "Fuel Economy", baseUnit: "liter_per_100km", description: "Fuel consumption measurements" },
-  { id: "flow", name: "Flow Rate", baseUnit: "cubic_meter_per_second", description: "Volumetric flow measurements" },
+  { id: "flow", name: "Flow Rate", baseUnit: "liter_per_second", description: "Flow rate measurements" },
   { id: "density", name: "Density", baseUnit: "kilogram_per_cubic_meter", description: "Density measurements" },
   { id: "force", name: "Force", baseUnit: "newton", description: "Force measurements" },
-  { id: "torque", name: "Torque", baseUnit: "newton_meter", description: "Torque and moment measurements" },
+  { id: "torque", name: "Torque", baseUnit: "newton_meter", description: "Torque measurements" },
   {
     id: "acceleration",
     name: "Acceleration",
     baseUnit: "meter_per_second_squared",
     description: "Acceleration measurements",
   },
-  { id: "illuminance", name: "Illuminance", baseUnit: "lux", description: "Light intensity measurements" },
+  { id: "illuminance", name: "Illuminance", baseUnit: "lux", description: "Light measurements" },
   { id: "luminance", name: "Luminance", baseUnit: "candela_per_square_meter", description: "Luminance measurements" },
   { id: "radioactivity", name: "Radioactivity", baseUnit: "becquerel", description: "Radioactivity measurements" },
   { id: "sound", name: "Sound", baseUnit: "decibel_spl", description: "Sound level measurements" },
   { id: "electrical", name: "Electrical", baseUnit: "ampere", description: "Electrical measurements" },
   { id: "magnetic", name: "Magnetic", baseUnit: "tesla", description: "Magnetic field measurements" },
   { id: "viscosity", name: "Viscosity", baseUnit: "pascal_second", description: "Viscosity measurements" },
-  { id: "currency", name: "Currency", baseUnit: "usd", description: "Currency exchange (requires API)" },
+  { id: "currency", name: "Currency", baseUnit: "usd", description: "World currency exchange rates" },
 ]
 
 // Comprehensive units registry
@@ -387,7 +387,7 @@ export const units: Unit[] = [
     symbol: "°F",
     category: "temperature",
     toBase: fahrenheitToKelvin,
-    fromBase: kelvinToFahrenheit,
+    fromBase: (v) => ((v - 273.15) * 9) / 5 + 32,
   },
   {
     id: "rankine",
@@ -1050,6 +1050,63 @@ export const units: Unit[] = [
   { id: "eur", name: "Euro", symbol: "€", category: "currency", toBase: (v) => v, fromBase: (v) => v },
   { id: "gbp", name: "British Pound", symbol: "£", category: "currency", toBase: (v) => v, fromBase: (v) => v },
   { id: "jpy", name: "Japanese Yen", symbol: "¥", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "cad", name: "Canadian Dollar", symbol: "C$", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "aud", name: "Australian Dollar", symbol: "A$", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "chf", name: "Swiss Franc", symbol: "CHF", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "cny", name: "Chinese Yuan", symbol: "¥", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "inr", name: "Indian Rupee", symbol: "₹", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "krw", name: "South Korean Won", symbol: "₩", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "nok", name: "Norwegian Krone", symbol: "kr", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "sek", name: "Swedish Krona", symbol: "kr", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "dkk", name: "Danish Krone", symbol: "kr", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "pln", name: "Polish Zloty", symbol: "zł", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "czk", name: "Czech Koruna", symbol: "Kč", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "huf", name: "Hungarian Forint", symbol: "Ft", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "ron", name: "Romanian Leu", symbol: "lei", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "bgn", name: "Bulgarian Lev", symbol: "лв", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "hrk", name: "Croatian Kuna", symbol: "kn", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "try", name: "Turkish Lira", symbol: "₺", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "rub", name: "Russian Ruble", symbol: "₽", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "uah", name: "Ukrainian Hryvnia", symbol: "₴", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "ils", name: "Israeli Shekel", symbol: "₪", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "aed", name: "UAE Dirham", symbol: "د.إ", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "sar", name: "Saudi Riyal", symbol: "﷼", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "qar", name: "Qatari Riyal", symbol: "﷼", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "kwd", name: "Kuwaiti Dinar", symbol: "د.ك", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "bhd", name: "Bahraini Dinar", symbol: ".د.ب", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "omr", name: "Omani Rial", symbol: "﷼", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "jod", name: "Jordanian Dinar", symbol: "د.ا", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "egp", name: "Egyptian Pound", symbol: "£", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "zar", name: "South African Rand", symbol: "R", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "ngn", name: "Nigerian Naira", symbol: "₦", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "kes", name: "Kenyan Shilling", symbol: "KSh", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "ghs", name: "Ghanaian Cedi", symbol: "₵", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "brl", name: "Brazilian Real", symbol: "R$", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "mxn", name: "Mexican Peso", symbol: "$", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "ars", name: "Argentine Peso", symbol: "$", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "clp", name: "Chilean Peso", symbol: "$", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "cop", name: "Colombian Peso", symbol: "$", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "pen", name: "Peruvian Sol", symbol: "S/", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "uyu", name: "Uruguayan Peso", symbol: "$U", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "pyg", name: "Paraguayan Guarani", symbol: "Gs", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "bob", name: "Bolivian Boliviano", symbol: "$b", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "sgd", name: "Singapore Dollar", symbol: "S$", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "hkd", name: "Hong Kong Dollar", symbol: "HK$", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "twd", name: "Taiwan Dollar", symbol: "NT$", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "thb", name: "Thai Baht", symbol: "฿", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "vnd", name: "Vietnamese Dong", symbol: "₫", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "idr", name: "Indonesian Rupiah", symbol: "Rp", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "myr", name: "Malaysian Ringgit", symbol: "RM", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "php", name: "Philippine Peso", symbol: "₱", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "nzd", name: "New Zealand Dollar", symbol: "NZ$", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "pkr", name: "Pakistani Rupee", symbol: "₨", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "bdt", name: "Bangladeshi Taka", symbol: "৳", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "lkr", name: "Sri Lankan Rupee", symbol: "₨", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "mmk", name: "Myanmar Kyat", symbol: "K", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "khr", name: "Cambodian Riel", symbol: "៛", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "lak", name: "Laotian Kip", symbol: "₭", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "bnd", name: "Brunei Dollar", symbol: "B$", category: "currency", toBase: (v) => v, fromBase: (v) => v },
+  { id: "mnt", name: "Mongolian Tugrik", symbol: "₮", category: "currency", toBase: (v) => v, fromBase: (v) => v },
 ]
 
 // Popular conversion pairs for quick access
@@ -1085,7 +1142,7 @@ export function getUnitsByCategory(categoryId: string): Unit[] {
   return units.filter((unit) => unit.category === categoryId)
 }
 
-export function getCategoryById(id: string): UnitCategory | undefined {
+export function getCategoryById(id: string): Category | undefined {
   return categories.find((category) => category.id === id)
 }
 
