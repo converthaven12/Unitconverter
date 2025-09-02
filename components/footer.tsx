@@ -27,7 +27,7 @@ export function Footer() {
                 Home
               </Link>
               <Link
-                href="/converters/meter-to-foot"
+                href="/src/app/(screens)/Converters/meter-to-foot"
                 className="text-sm text-muted-foreground hover:text-primary transition-colors"
               >
                 All Converters
@@ -59,25 +59,25 @@ export function Footer() {
             <h3 className="font-semibold text-foreground">Popular Categories</h3>
             <nav className="flex flex-col space-y-2">
               <Link
-                href="/converters/meter-to-foot"
+                href="/src/app/(screens)/Converters/meter-to-foot"
                 className="text-sm text-muted-foreground hover:text-primary transition-colors"
               >
                 Length
               </Link>
               <Link
-                href="/converters/kilogram-to-pound"
+                href="/src/app/(screens)/Converters/kilogram-to-pound"
                 className="text-sm text-muted-foreground hover:text-primary transition-colors"
               >
                 Weight
               </Link>
               <Link
-                href="/converters/celsius-to-fahrenheit"
+                href="/src/app/(screens)/Converters/celsius-to-fahrenheit"
                 className="text-sm text-muted-foreground hover:text-primary transition-colors"
               >
                 Temperature
               </Link>
               <Link
-                href="/converters/liter-to-gallon-us"
+                href="/src/app/(screens)/Converters/liter-to-gallon_us"
                 className="text-sm text-muted-foreground hover:text-primary transition-colors"
               >
                 Volume

@@ -135,7 +135,7 @@ export default function HomePage() {
                       </CardHeader>
                       <CardContent>
                         <Button asChild variant="outline" className="w-full bg-transparent">
-                          <Link href={`/converters/${pair.from}-to-${pair.to}`}>Convert Now</Link>
+                          <Link href={`/src/app/(screens)/Converters/${pair.from}-to-${pair.to}`}>Convert Now</Link>
                         </Button>
                       </CardContent>
                     </Card>
@@ -226,7 +226,7 @@ export default function HomePage() {
                         : `${categoryUnits[0]?.id}-to-${categoryUnits[0]?.id}`
 
                     return (
-                      <Link key={category.id} href={`/converters/${defaultConverter}`}>
+                      <Link key={category.id} href={`/src/app/(screens)/Converters/${defaultConverter}`}>
                         <Card className="hover:shadow-md transition-all duration-200 cursor-pointer hover:scale-105">
                           <CardContent className="p-4">
                             <div className="space-y-2">
