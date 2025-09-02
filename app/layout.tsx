@@ -10,7 +10,7 @@ import { Footer } from "@/components/footer"
 export const metadata: Metadata = {
   title: "Unit Converter - Convert Between Any Units Instantly",
   description:
-    "Professional unit converter supporting length, weight, temperature, volume, and 20+ categories. Convert between metric, imperial, and specialized units with accurate formulas.",
+   Professional unit converter supporting length, weight, temperature, volume, and 20+ categories. Convert between metric, imperial, and specialized units with accurate formulas.
   generator: "v0.app",
 }
 
