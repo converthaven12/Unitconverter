@@ -20,7 +20,7 @@ export interface ArticleOverride {
 }
 
 export const ARTICLE_OVERRIDES: Record<string, ArticleOverride> = {
-  "centimeter-to-inch": {
+  "cm-to-inches": {
     title: "Complete Guide to Converting Centimeters to Inches",
     sections: [
       {
@@ -109,3 +109,5 @@ export const ARTICLE_OVERRIDES: Record<string, ArticleOverride> = {
     ],
   },
 }
+
+ARTICLE_OVERRIDES["centimeter-to-inch"] = ARTICLE_OVERRIDES["cm-to-inches"]
