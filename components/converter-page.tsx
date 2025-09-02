@@ -29,10 +29,10 @@ interface ConverterPageProps {
 export function ConverterPage({
   fromUnit,
   toUnit,
-  examples,
-  relatedConverters,
+  examples = [], // Added default empty array
+  relatedConverters = [], // Added default empty array
   reverseConverter,
-  useCases,
+  useCases = [], // Added default empty array
 }: ConverterPageProps) {
   const [inputValue, setInputValue] = useState("1")
   const [result, setResult] = useState("")
@@ -41,7 +41,10 @@ export function ConverterPage({
   const [selectedToUnit, setSelectedToUnit] = useState(toUnit.id)
   const [isLoading, setIsLoading] = useState(false)
 
-  const categoryUnits = getUnitsByCategory(fromUnit.category)
+  const categoryUnits = Array.isArray(getUnitsByCategory(fromUnit.category))
+    ? getUnitsByCategory(fromUnit.category)
+    : []
+
   const currentFromUnit = categoryUnits.find((unit) => unit.id === selectedFromUnit) || {
     id: fromUnit.id,
     name: fromUnit.name,
@@ -249,16 +252,17 @@ export function ConverterPage({
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            {categoryUnits.map((unit) => (
-                              <SelectItem key={unit.id} value={unit.id}>
-                                <div className="flex items-center gap-2">
-                                  <Badge variant="secondary" className="text-xs">
-                                    {unit.symbol}
-                                  </Badge>
-                                  <span>{unit.name}</span>
-                                </div>
-                              </SelectItem>
-                            ))}
+                            {Array.isArray(categoryUnits) &&
+                              categoryUnits.map((unit) => (
+                                <SelectItem key={unit.id} value={unit.id}>
+                                  <div className="flex items-center gap-2">
+                                    <Badge variant="secondary" className="text-xs">
+                                      {unit.symbol}
+                                    </Badge>
+                                    <span>{unit.name}</span>
+                                  </div>
+                                </SelectItem>
+                              ))}
                           </SelectContent>
                         </Select>
                       </div>
@@ -281,16 +285,17 @@ export function ConverterPage({
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            {categoryUnits.map((unit) => (
-                              <SelectItem key={unit.id} value={unit.id}>
-                                <div className="flex items-center gap-2">
-                                  <Badge variant="secondary" className="text-xs">
-                                    {unit.symbol}
-                                  </Badge>
-                                  <span>{unit.name}</span>
-                                </div>
-                              </SelectItem>
-                            ))}
+                            {Array.isArray(categoryUnits) &&
+                              categoryUnits.map((unit) => (
+                                <SelectItem key={unit.id} value={unit.id}>
+                                  <div className="flex items-center gap-2">
+                                    <Badge variant="secondary" className="text-xs">
+                                      {unit.symbol}
+                                    </Badge>
+                                    <span>{unit.name}</span>
+                                  </div>
+                                </SelectItem>
+                              ))}
                           </SelectContent>
                         </Select>
                       </div>
@@ -330,11 +335,12 @@ export function ConverterPage({
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  {articleContent.content.map((paragraph, index) => (
-                    <p key={index} className="text-muted-foreground leading-relaxed">
-                      {paragraph}
-                    </p>
-                  ))}
+                  {Array.isArray(articleContent.content) &&
+                    articleContent.content.map((paragraph, index) => (
+                      <p key={index} className="text-muted-foreground leading-relaxed">
+                        {paragraph}
+                      </p>
+                    ))}
                 </CardContent>
               </Card>
             </section>
@@ -357,17 +363,18 @@ export function ConverterPage({
                     </CardHeader>
                     <CardContent>
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        {examples.map((example, index) => (
-                          <div key={index} className="text-center p-4 rounded-lg bg-muted">
-                            <div className="text-lg font-semibold">
-                              {example.input} {currentFromUnit.symbol}
+                        {Array.isArray(examples) &&
+                          examples.map((example, index) => (
+                            <div key={index} className="text-center p-4 rounded-lg bg-muted">
+                              <div className="text-lg font-semibold">
+                                {example.input} {currentFromUnit.symbol}
+                              </div>
+                              <div className="text-sm text-muted-foreground">=</div>
+                              <div className="text-lg font-semibold text-primary">
+                                {formatNumber(example.output)} {currentToUnit.symbol}
+                              </div>
                             </div>
-                            <div className="text-sm text-muted-foreground">=</div>
-                            <div className="text-lg font-semibold text-primary">
-                              {formatNumber(example.output)} {currentToUnit.symbol}
-                            </div>
-                          </div>
-                        ))}
+                          ))}
                       </div>
                     </CardContent>
                   </Card>
@@ -393,14 +400,15 @@ export function ConverterPage({
                             </tr>
                           </thead>
                           <tbody>
-                            {conversionTableData.map((row, index) => (
-                              <tr key={index} className="hover:bg-muted/30">
-                                <td className="border border-border p-3 font-mono">{formatNumber(row.input)}</td>
-                                <td className="border border-border p-3 font-mono text-primary">
-                                  {formatNumber(row.output)}
-                                </td>
-                              </tr>
-                            ))}
+                            {Array.isArray(conversionTableData) &&
+                              conversionTableData.map((row, index) => (
+                                <tr key={index} className="hover:bg-muted/30">
+                                  <td className="border border-border p-3 font-mono">{formatNumber(row.input)}</td>
+                                  <td className="border border-border p-3 font-mono text-primary">
+                                    {formatNumber(row.output)}
+                                  </td>
+                                </tr>
+                              ))}
                           </tbody>
                         </table>
                       </div>
@@ -419,14 +427,15 @@ export function ConverterPage({
                     </CardHeader>
                     <CardContent>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {useCases.map((useCase, index) => (
-                          <div key={index} className="flex items-start gap-3 p-3 rounded-lg border">
-                            <div className="flex items-center justify-center size-6 rounded-full bg-primary/10 text-primary text-sm font-medium mt-0.5">
-                              {index + 1}
+                        {Array.isArray(useCases) &&
+                          useCases.map((useCase, index) => (
+                            <div key={index} className="flex items-start gap-3 p-3 rounded-lg border">
+                              <div className="flex items-center justify-center size-6 rounded-full bg-primary/10 text-primary text-sm font-medium mt-0.5">
+                                {index + 1}
+                              </div>
+                              <p className="text-sm">{useCase}</p>
                             </div>
-                            <p className="text-sm">{useCase}</p>
-                          </div>
-                        ))}
+                          ))}
                       </div>
                     </CardContent>
                   </Card>
@@ -456,20 +465,21 @@ export function ConverterPage({
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                          {relatedConverters.map((converter) => (
-                            <Link
-                              key={converter.slug}
-                              href={`/converters/${converter.slug}`}
-                              className="flex items-center justify-between p-3 rounded-lg border hover:bg-accent transition-colors"
-                            >
-                              <span className="text-sm">
-                                {converter.fromUnit.name} to {converter.toUnit.name}
-                              </span>
-                              <Badge variant="secondary" className="text-xs">
-                                {converter.label}
-                              </Badge>
-                            </Link>
-                          ))}
+                          {Array.isArray(relatedConverters) &&
+                            relatedConverters.map((converter) => (
+                              <Link
+                                key={converter.slug}
+                                href={`/converters/${converter.slug}`}
+                                className="flex items-center justify-between p-3 rounded-lg border hover:bg-accent transition-colors"
+                              >
+                                <span className="text-sm">
+                                  {converter.fromUnit.name} to {converter.toUnit.name}
+                                </span>
+                                <Badge variant="secondary" className="text-xs">
+                                  {converter.label}
+                                </Badge>
+                              </Link>
+                            ))}
                         </div>
                       </div>
                     </CardContent>
