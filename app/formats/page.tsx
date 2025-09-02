@@ -157,7 +157,7 @@ export default function FormatsPage() {
                       {category.examples.slice(0, 2).map((example) => (
                         <Link
                           key={example}
-                          href={`/src/app/(screens)/Converters/${example}`}
+                          href={`/converters/${example}`}
                           className="block text-sm text-primary hover:underline"
                         >
                           {example.replace(/-/g, " → ").replace(/_/g, " ")}

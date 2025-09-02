@@ -54,7 +54,7 @@ export function UnitConverterSidebar({ className }: UnitConverterSidebarProps) {
 
   const handleQuickConvert = () => {
     if (fromUnit && toUnit) {
-      router.push(`/src/app/(screens)/Converters/${fromUnit}-to-${toUnit}`)
+      router.push(`/converters/${fromUnit}-to-${toUnit}`)
     }
   }
 
@@ -78,14 +78,14 @@ export function UnitConverterSidebar({ className }: UnitConverterSidebarProps) {
     // Find a popular conversion pair for this unit, or create a default one
     const popularPair = popularPairs.find((pair) => pair.from === unitId || pair.to === unitId)
     if (popularPair) {
-      router.push(`/src/app/(screens)/Converters/${popularPair.from}-to-${popularPair.to}`)
+      router.push(`/converters/${popularPair.from}-to-${popularPair.to}`)
     } else {
       // Create a default conversion with the first unit of the same category
       const unit = units.find((u) => u.id === unitId)
       if (unit) {
         const categoryUnits = getUnitsByCategory(unit.category)
         const otherUnit = categoryUnits.find((u) => u.id !== unitId) || categoryUnits[0]
-        router.push(`/src/app/(screens)/Converters/${unitId}-to-${otherUnit.id}`)
+        router.push(`/converters/${unitId}-to-${otherUnit.id}`)
       }
     }
   }
@@ -222,7 +222,7 @@ export function UnitConverterSidebar({ className }: UnitConverterSidebarProps) {
                 <SidebarMenuItem key={`${pair.from}-${pair.to}`}>
                   <SidebarMenuButton asChild>
                     <Link
-                      href={`/src/app/(screens)/Converters/${pair.from}-to-${pair.to}`}
+                      href={`/converters/${pair.from}-to-${pair.to}`}
                       className="transition-all duration-150 hover:bg-accent"
                     >
                       <span className="text-sm">{pair.label}</span>
@@ -247,8 +247,8 @@ export function UnitConverterSidebar({ className }: UnitConverterSidebarProps) {
                 const firstTwoUnits = categoryUnits.slice(0, 2)
                 const defaultConverterUrl =
                   firstTwoUnits.length >= 2
-                    ? `/src/app/(screens)/Converters/${firstTwoUnits[0].id}-to-${firstTwoUnits[1].id}`
-                    : `/src/app/(screens)/Converters/${categoryUnits[0]?.id}-to-${categoryUnits[0]?.id}`
+                    ? `/converters/${firstTwoUnits[0].id}-to-${firstTwoUnits[1].id}`
+                    : `/converters/${categoryUnits[0]?.id}-to-${categoryUnits[0]?.id}`
 
                 return (
                   <SidebarMenuItem key={category.id}>

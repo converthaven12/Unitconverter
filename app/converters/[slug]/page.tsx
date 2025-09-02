@@ -7,7 +7,6 @@ import { generateCanonicalUrl, generateKeywords } from "@/lib/seo-utils"
 import { ConverterPage } from "@/components/converter-page"
 import { StructuredData } from "@/components/structured-data"
 import type { SerializableUnit, SerializableConverter } from "@/lib/types"
-import { units } from "@/lib/units-registry" // Added import for units
 
 interface PageProps {
   params: Promise<{ slug: string }>
@@ -118,33 +117,17 @@ export default async function ConverterPageRoute({ params }: PageProps) {
   const parsed = parseSlug(slug)
 
   if (!parsed) {
-    console.log("[v0] Invalid slug format:", slug)
     notFound()
   }
 
   const { fromUnitId, toUnitId } = parsed
 
-  console.log("[v0] Parsed slug:", slug, "->", { fromUnitId, toUnitId })
-
   const fromUnit = getUnitById(fromUnitId)
   const toUnit = getUnitById(toUnitId)
 
-  if (!fromUnit) {
-    console.log("[v0] From unit not found:", fromUnitId, "Available units:", units.map((u) => u.id).slice(0, 10))
+  if (!fromUnit || !toUnit || fromUnit.category !== toUnit.category) {
     notFound()
   }
-
-  if (!toUnit) {
-    console.log("[v0] To unit not found:", toUnitId, "Available units:", units.map((u) => u.id).slice(0, 10))
-    notFound()
-  }
-
-  if (fromUnit.category !== toUnit.category) {
-    console.log("[v0] Category mismatch:", fromUnit.category, "vs", toUnit.category)
-    notFound()
-  }
-
-  console.log("[v0] Successfully found converter:", fromUnit.name, "to", toUnit.name)
 
   // Get quick examples
   const examples = getQuickExamples(fromUnitId, toUnitId)
@@ -154,7 +137,7 @@ export default async function ConverterPageRoute({ params }: PageProps) {
     const rawCategoryUnits = getUnitsByCategory(fromUnit.category)
     categoryUnits = Array.isArray(rawCategoryUnits) ? rawCategoryUnits : []
   } catch (error) {
-    console.error("[v0] Error getting category units:", error)
+    console.error("Error getting category units:", error)
     categoryUnits = []
   }
 
@@ -191,7 +174,7 @@ export default async function ConverterPageRoute({ params }: PageProps) {
         }))
     }
   } catch (error) {
-    console.error("[v0] Error creating related converters:", error)
+    console.error("Error creating related converters:", error)
     relatedConverters = []
   }
 
