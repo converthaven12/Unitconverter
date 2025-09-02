@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
 import { ArrowRightLeft, Calculator, BookOpen, Lightbulb, ArrowRight } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -40,6 +40,7 @@ export function ConverterPage({
   const [selectedFromUnit, setSelectedFromUnit] = useState(fromUnit.id)
   const [selectedToUnit, setSelectedToUnit] = useState(toUnit.id)
   const [isLoading, setIsLoading] = useState(false)
+  const [isConverting, setIsConverting] = useState(false)
 
   const categoryUnits = Array.isArray(getUnitsByCategory(fromUnit.category))
     ? getUnitsByCategory(fromUnit.category)
@@ -59,11 +60,15 @@ export function ConverterPage({
   }
 
   useEffect(() => {
+    if (isConverting) return
+
     const performConversion = async () => {
       const value = Number.parseFloat(inputValue) || 0
       setIsLoading(true)
+      setIsConverting(true)
 
       try {
+        console.log("[v0] Converting:", value, selectedFromUnit, "to", selectedToUnit)
         const conversion = await convertUnits(value, selectedFromUnit, selectedToUnit)
 
         if (conversion.isValid) {
@@ -74,16 +79,18 @@ export function ConverterPage({
           setFormula("")
         }
       } catch (error) {
-        console.error("Conversion error:", error)
+        console.error("[v0] Conversion error:", error)
         setResult("Error")
         setFormula("")
       } finally {
         setIsLoading(false)
+        setTimeout(() => setIsConverting(false), 200)
       }
     }
 
-    performConversion()
-  }, [inputValue, selectedFromUnit, selectedToUnit])
+    const timeoutId = setTimeout(performConversion, 300)
+    return () => clearTimeout(timeoutId)
+  }, [inputValue, selectedFromUnit, selectedToUnit, isConverting])
 
   const handleSwap = () => {
     const tempFromUnit = selectedFromUnit
@@ -91,13 +98,25 @@ export function ConverterPage({
     setSelectedToUnit(tempFromUnit)
   }
 
-  const handleFromUnitChange = (unitId: string) => {
-    setSelectedFromUnit(unitId)
-  }
+  const handleFromUnitChange = useCallback(
+    (unitId: string) => {
+      if (unitId !== selectedFromUnit) {
+        console.log("[v0] Changing from unit to:", unitId)
+        setSelectedFromUnit(unitId)
+      }
+    },
+    [selectedFromUnit],
+  )
 
-  const handleToUnitChange = (unitId: string) => {
-    setSelectedToUnit(unitId)
-  }
+  const handleToUnitChange = useCallback(
+    (unitId: string) => {
+      if (unitId !== selectedToUnit) {
+        console.log("[v0] Changing to unit to:", unitId)
+        setSelectedToUnit(unitId)
+      }
+    },
+    [selectedToUnit],
+  )
 
   const generateArticleContent = () => {
     const categoryArticles: Record<
@@ -473,10 +492,17 @@ export function ConverterPage({
 
   useEffect(() => {
     const updateTable = async () => {
-      const tableData = await generateConversionTable()
-      setConversionTableData(tableData)
+      try {
+        const tableData = await generateConversionTable()
+        setConversionTableData(tableData)
+      } catch (error) {
+        console.error("[v0] Error updating conversion table:", error)
+        setConversionTableData([])
+      }
     }
-    updateTable()
+
+    const timeoutId = setTimeout(updateTable, 500)
+    return () => clearTimeout(timeoutId)
   }, [selectedFromUnit, selectedToUnit])
 
   return (

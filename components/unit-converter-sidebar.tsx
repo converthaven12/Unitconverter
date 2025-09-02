@@ -1,5 +1,5 @@
 "use client"
-import { useState, useMemo } from "react"
+import { useState, useMemo, useCallback } from "react"
 import { Search, ArrowRightLeft, Calculator } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -37,6 +37,7 @@ export function UnitConverterSidebar({ className }: UnitConverterSidebarProps) {
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
     new Set(["length", "weight", "temperature"]),
   )
+  const [isNavigating, setIsNavigating] = useState(false)
 
   // Filter units based on search query
   const filteredUnits = useMemo(() => {
@@ -52,11 +53,31 @@ export function UnitConverterSidebar({ className }: UnitConverterSidebarProps) {
     return [...popularUnits, ...otherUnits]
   }, [])
 
-  const handleQuickConvert = () => {
-    if (fromUnit && toUnit) {
-      router.push(`/converters/${fromUnit}-to-${toUnit}`)
+  const navigateToConverter = useCallback(
+    (url: string) => {
+      if (isNavigating) {
+        console.log("[v0] Navigation already in progress, skipping:", url)
+        return
+      }
+
+      console.log("[v0] Navigating to:", url)
+      setIsNavigating(true)
+
+      // Add a small delay to prevent rapid navigation
+      setTimeout(() => {
+        router.push(url)
+        // Reset navigation state after a delay
+        setTimeout(() => setIsNavigating(false), 1000)
+      }, 100)
+    },
+    [router, isNavigating],
+  )
+
+  const handleQuickConvert = useCallback(() => {
+    if (fromUnit && toUnit && fromUnit !== toUnit) {
+      navigateToConverter(`/converters/${fromUnit}-to-${toUnit}`)
     }
-  }
+  }, [fromUnit, toUnit, navigateToConverter])
 
   const handleSwapUnits = () => {
     const temp = fromUnit
@@ -74,21 +95,26 @@ export function UnitConverterSidebar({ className }: UnitConverterSidebarProps) {
     setExpandedCategories(newExpanded)
   }
 
-  const handleUnitClick = (unitId: string) => {
-    // Find a popular conversion pair for this unit, or create a default one
-    const popularPair = popularPairs.find((pair) => pair.from === unitId || pair.to === unitId)
-    if (popularPair) {
-      router.push(`/converters/${popularPair.from}-to-${popularPair.to}`)
-    } else {
-      // Create a default conversion with the first unit of the same category
-      const unit = units.find((u) => u.id === unitId)
-      if (unit) {
-        const categoryUnits = getUnitsByCategory(unit.category)
-        const otherUnit = categoryUnits.find((u) => u.id !== unitId) || categoryUnits[0]
-        router.push(`/converters/${unitId}-to-${otherUnit.id}`)
+  const handleUnitClick = useCallback(
+    (unitId: string) => {
+      // Find a popular conversion pair for this unit, or create a default one
+      const popularPair = popularPairs.find((pair) => pair.from === unitId || pair.to === unitId)
+      if (popularPair) {
+        navigateToConverter(`/converters/${popularPair.from}-to-${popularPair.to}`)
+      } else {
+        // Create a default conversion with the first unit of the same category
+        const unit = units.find((u) => u.id === unitId)
+        if (unit) {
+          const categoryUnits = getUnitsByCategory(unit.category)
+          const otherUnit = categoryUnits.find((u) => u.id !== unitId) || categoryUnits[0]
+          if (otherUnit && otherUnit.id !== unitId) {
+            navigateToConverter(`/converters/${unitId}-to-${otherUnit.id}`)
+          }
+        }
       }
-    }
-  }
+    },
+    [navigateToConverter],
+  )
 
   return (
     <Sidebar className={className}>
@@ -159,11 +185,11 @@ export function UnitConverterSidebar({ className }: UnitConverterSidebarProps) {
 
               <Button
                 onClick={handleQuickConvert}
-                disabled={!fromUnit || !toUnit}
+                disabled={!fromUnit || !toUnit || fromUnit === toUnit || isNavigating}
                 className="w-full h-8 transition-all duration-150"
                 size="sm"
               >
-                Convert
+                {isNavigating ? "Loading..." : "Convert"}
               </Button>
             </div>
           </SidebarGroupContent>
