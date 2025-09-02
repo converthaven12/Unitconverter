@@ -7,6 +7,7 @@ import { generateCanonicalUrl, generateKeywords } from "@/lib/seo-utils"
 import { ConverterPage } from "@/components/converter-page"
 import { StructuredData } from "@/components/structured-data"
 import type { SerializableUnit, SerializableConverter } from "@/lib/types"
+import { ARTICLE_OVERRIDES } from "../articleOverrides"
 
 interface PageProps {
   params: Promise<{ slug: string }>
@@ -189,6 +190,8 @@ export default async function ConverterPageRoute({ params }: PageProps) {
   // Generate real-life use cases based on unit category
   const useCases = generateUseCases(fromUnit, toUnit)
 
+  const customArticle = ARTICLE_OVERRIDES[slug]
+
   return (
     <>
       <StructuredData fromUnit={fromUnit} toUnit={toUnit} slug={slug} />
@@ -199,6 +202,7 @@ export default async function ConverterPageRoute({ params }: PageProps) {
         relatedConverters={relatedConverters}
         reverseConverter={reverseConverter}
         useCases={useCases}
+        customArticle={customArticle}
       />
     </>
   )
