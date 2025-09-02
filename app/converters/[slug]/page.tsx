@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 
-import { getUnitById, getUnitsByCategory, popularPairs } from "@/lib/units-registry"
+import { getUnitById, getUnitsByCategory, popularPairs, units } from "@/lib/units-registry"
 import { getQuickExamples } from "@/lib/conversion-engine"
 import { generateCanonicalUrl, generateKeywords } from "@/lib/seo-utils"
 import { ConverterPage } from "@/components/converter-page"
@@ -21,7 +21,58 @@ function parseSlug(slug: string): { fromUnitId: string; toUnitId: string } | nul
   const [, fromUnitId, toUnitId] = match
 
   const normalizeUnitId = (id: string) => {
-    return id.replace(/-/g, "_").toLowerCase()
+    let normalized = id.replace(/-/g, "_").toLowerCase()
+
+    // Create symbol-to-ID mapping from units registry
+    const symbolToId: Record<string, string> = {}
+    const pluralToSingular: Record<string, string> = {
+      inches: "inch",
+      feet: "foot",
+      yards: "yard",
+      miles: "mile",
+      meters: "meter",
+      centimeters: "centimeter",
+      millimeters: "millimeter",
+      kilometers: "kilometer",
+      pounds: "pound",
+      ounces: "ounce",
+      grams: "gram",
+      kilograms: "kilogram",
+      tons: "ton",
+      gallons: "gallon",
+      liters: "liter",
+      milliliters: "milliliter",
+      degrees: "degree",
+      radians: "radian",
+      seconds: "second",
+      minutes: "minute",
+      hours: "hour",
+      days: "day",
+      weeks: "week",
+      months: "month",
+      years: "year",
+    }
+
+    // Build symbol mapping from units registry
+    if (Array.isArray(units)) {
+      units.forEach((unit) => {
+        if (unit.symbol) {
+          symbolToId[unit.symbol.toLowerCase()] = unit.id
+        }
+      })
+    }
+
+    // Check if it's a plural form first
+    if (pluralToSingular[normalized]) {
+      normalized = pluralToSingular[normalized]
+    }
+
+    // Check if it's a symbol
+    if (symbolToId[normalized]) {
+      normalized = symbolToId[normalized]
+    }
+
+    return normalized
   }
 
   return {
