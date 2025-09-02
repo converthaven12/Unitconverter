@@ -23,9 +23,19 @@ function parseSlug(slug: string): { fromUnitId: string; toUnitId: string } | nul
 
 // Generate static params for popular conversions
 export async function generateStaticParams() {
-  return popularPairs.map((pair) => ({
-    slug: `${pair.from}-to-${pair.to}`,
-  }))
+  if (!Array.isArray(popularPairs)) {
+    console.error("[v0] popularPairs is not an array:", typeof popularPairs, popularPairs)
+    return []
+  }
+
+  try {
+    return popularPairs.map((pair) => ({
+      slug: `${pair.from}-to-${pair.to}`,
+    }))
+  } catch (error) {
+    console.error("[v0] Error in generateStaticParams:", error)
+    return []
+  }
 }
 
 // Generate metadata for SEO
@@ -113,7 +123,14 @@ export default async function ConverterPageRoute({ params }: PageProps) {
   // Get quick examples
   const examples = getQuickExamples(fromUnitId, toUnitId)
 
-  const categoryUnits = getUnitsByCategory(fromUnit.category) || []
+  let categoryUnits: any[] = []
+  try {
+    const rawCategoryUnits = getUnitsByCategory(fromUnit.category)
+    categoryUnits = Array.isArray(rawCategoryUnits) ? rawCategoryUnits : []
+  } catch (error) {
+    console.error("[v0] Error getting category units:", error)
+    categoryUnits = []
+  }
 
   const serializableFromUnit: SerializableUnit = {
     id: fromUnit.id,
@@ -129,22 +146,28 @@ export default async function ConverterPageRoute({ params }: PageProps) {
     category: toUnit.category,
   }
 
-  const relatedConverters: SerializableConverter[] = Array.isArray(categoryUnits)
-    ? categoryUnits
-        .filter((unit) => unit && unit.id !== fromUnitId && unit.id !== toUnitId)
+  let relatedConverters: SerializableConverter[] = []
+  try {
+    if (Array.isArray(categoryUnits) && categoryUnits.length > 0) {
+      relatedConverters = categoryUnits
+        .filter((unit) => unit && unit.id && unit.id !== fromUnitId && unit.id !== toUnitId)
         .slice(0, 8)
         .map((unit) => ({
           fromUnit: serializableFromUnit,
           toUnit: {
             id: unit.id,
-            name: unit.name,
-            symbol: unit.symbol,
-            category: unit.category,
+            name: unit.name || "Unknown",
+            symbol: unit.symbol || "?",
+            category: unit.category || fromUnit.category,
           },
           slug: `${fromUnitId}-to-${unit.id}`,
           label: `${fromUnit.symbol} → ${unit.symbol}`,
         }))
-    : []
+    }
+  } catch (error) {
+    console.error("[v0] Error creating related converters:", error)
+    relatedConverters = []
+  }
 
   // Get reverse converter
   const reverseConverter: SerializableConverter = {
