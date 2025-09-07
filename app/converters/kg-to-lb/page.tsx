@@ -10,7 +10,7 @@ export const revalidate = 0
 
 export default function KgToLbPage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background">
       <main className="p-6 lg:p-8">
         <div className="max-w-4xl mx-auto space-y-8">
           <div className="text-center space-y-4">
