@@ -1159,3 +1159,21 @@ export function searchUnits(query: string): Unit[] {
       unit.aliases?.some((alias) => alias.toLowerCase().includes(lowercaseQuery)),
   )
 }
+
+export const unitsRegistry = {
+  categories: categories.reduce(
+    (acc, category) => {
+      acc[category.id] = {
+        ...category,
+        units: getUnitsByCategory(category.id),
+      }
+      return acc
+    },
+    {} as Record<string, Category & { units: Unit[] }>,
+  ),
+  units,
+  getUnitById,
+  getUnitsByCategory,
+  getCategoryById,
+  searchUnits,
+}

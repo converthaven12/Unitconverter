@@ -218,3 +218,23 @@ export function formatNumber(value: number, precision = 6): string {
     return value.toFixed(precision)
   }
 }
+
+export function convertUnit(value: number, fromUnitId: string, toUnitId: string): number {
+  const fromUnit = getUnitById(fromUnitId)
+  const toUnit = getUnitById(toUnitId)
+
+  if (!fromUnit || !toUnit || fromUnit.category !== toUnit.category) {
+    return 0
+  }
+
+  if (isNaN(value) || !isFinite(value)) {
+    return 0
+  }
+
+  try {
+    const baseValue = fromUnit.toBase(value)
+    return toUnit.fromBase(baseValue)
+  } catch (error) {
+    return 0
+  }
+}
