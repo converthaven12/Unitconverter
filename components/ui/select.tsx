@@ -2,7 +2,9 @@
 
 import type * as React from "react"
 import * as SelectPrimitive from "@radix-ui/react-select"
-import { Check, ChevronDown, ChevronUp } from "lucide-react"
+const Check = () => <span>✓</span>
+const ChevronDown = ({ className }: { className?: string }) => <span className={className}>▼</span>
+const ChevronUp = ({ className }: { className?: string }) => <span className={className}>▲</span>
 
 import { cn } from "@/lib/utils"
 

@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Calculator } from "lucide-react"
+const Calculator = () => <span className="text-lg">🧮</span>
 import { Separator } from "@/components/ui/separator"
 
 export function Footer() {
@@ -10,7 +10,7 @@ export function Footer() {
           {/* Brand Section */}
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <Calculator className="size-5 text-primary" />
+              <Calculator />
               <span className="font-semibold text-lg">Unit Converter</span>
             </div>
             <p className="text-sm text-muted-foreground">

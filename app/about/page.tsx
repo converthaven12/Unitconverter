@@ -2,7 +2,13 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Calculator, Globe, Zap, Shield, Users, Award } from "lucide-react"
+
+const Calculator = () => <span className="text-xl">🧮</span>
+const Globe = () => <span className="text-xl">🌍</span>
+const Zap = () => <span className="text-xl">⚡</span>
+const Shield = () => <span className="text-xl">🛡️</span>
+const Users = () => <span className="text-xl">👥</span>
+const Award = () => <span className="text-xl">🏆</span>
 
 export const metadata: Metadata = {
   title: "About Us - All Unit Converter | Professional Unit Conversion Tool",
@@ -103,7 +109,7 @@ export default function AboutPage() {
             {features.map((feature, index) => (
               <Card key={index} className="text-center">
                 <CardHeader>
-                  <feature.icon className="w-12 h-12 mx-auto text-primary mb-4" />
+                  {feature.icon()}
                   <CardTitle className="text-lg">{feature.title}</CardTitle>
                 </CardHeader>
                 <CardContent>

@@ -1,6 +1,7 @@
 "use client"
 import { useState, useEffect } from "react"
-import { ArrowRightLeft, Calculator } from "lucide-react"
+const ArrowRightLeft = () => <span className="text-lg">⇄</span>
+const Calculator = () => <span className="text-lg">🧮</span>
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -44,7 +45,7 @@ export function FeaturedConverter() {
     <Card className="max-w-2xl mx-auto">
       <CardHeader className="text-center">
         <CardTitle className="flex items-center justify-center gap-2">
-          <Calculator className="size-5" />
+          <Calculator />
           Temperature Converter
         </CardTitle>
         <CardDescription>Convert between Celsius and Fahrenheit instantly</CardDescription>
@@ -70,7 +71,7 @@ export function FeaturedConverter() {
 
           <div className="flex justify-center">
             <Button variant="ghost" size="icon" onClick={handleSwap} className="rounded-full">
-              <ArrowRightLeft className="size-4" />
+              <ArrowRightLeft />
             </Button>
           </div>
 
