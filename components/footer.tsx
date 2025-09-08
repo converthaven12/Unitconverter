@@ -77,10 +77,34 @@ export function Footer() {
                 Temperature
               </Link>
               <Link
-                href="/converters/liter-to-gallon_us/"
+                href="/converters/gallon-us-to-liter/"
                 className="text-sm text-muted-foreground hover:text-primary transition-colors"
               >
                 Volume
+              </Link>
+              <Link
+                href="/converters/kilometer-per-hour-to-mile-per-hour/"
+                className="text-sm text-muted-foreground hover:text-primary transition-colors"
+              >
+                Speed
+              </Link>
+              <Link
+                href="/converters/bar-to-psi/"
+                className="text-sm text-muted-foreground hover:text-primary transition-colors"
+              >
+                Pressure
+              </Link>
+              <Link
+                href="/converters/joule-to-calorie/"
+                className="text-sm text-muted-foreground hover:text-primary transition-colors"
+              >
+                Energy
+              </Link>
+              <Link
+                href="/converters/gigabyte-to-gibibyte/"
+                className="text-sm text-muted-foreground hover:text-primary transition-colors"
+              >
+                Data Storage
               </Link>
             </nav>
           </div>
