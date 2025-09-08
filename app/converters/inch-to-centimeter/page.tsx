@@ -44,7 +44,7 @@ export default function InchToCentimeterPage() {
           </div>
 
           <article className="prose prose-lg max-w-none">
-            <h2>Understanding the Inch to Centimeter Conversion</h2>
+            <h2>Understanding the Inch to Centimeters Conversion</h2>
             <p>
               Converting inches to centimeters is essential for international measurements and working between imperial
               and metric systems. The conversion is straightforward: 1 inch equals exactly 2.54 centimeters.
