@@ -1,6 +1,5 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Analytics } from "@vercel/analytics/react"
 import { Suspense } from "react"
 import "./globals.css"
 import { Footer } from "@/components/footer"
@@ -22,12 +21,11 @@ export default function RootLayout({
     <html lang="en">
       <body className="font-sans min-h-screen flex flex-col">
         <SidebarProvider>
-          <div className="flex-1">
+          <main className="flex-1">
             <Suspense fallback={null}>{children}</Suspense>
-          </div>
-          <Footer />
+          </main>
         </SidebarProvider>
-        <Analytics />
+        <Footer />
       </body>
     </html>
   )
