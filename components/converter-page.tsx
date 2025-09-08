@@ -1,7 +1,6 @@
 "use client"
 import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
-import { ArrowRightLeft, Calculator, BookOpen, Lightbulb, ArrowRight } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
@@ -17,6 +16,12 @@ import { convertUnits, formatNumber } from "@/lib/conversion-engine"
 import { getUnitsByCategory } from "@/lib/units-registry"
 import type { SerializableUnit, SerializableConverter } from "@/lib/types"
 import type { ArticleOverride } from "@/app/converters/articleOverrides"
+
+const Calculator = () => <span className="text-lg">🧮</span>
+const ArrowRightLeft = () => <span className="text-sm">⇄</span>
+const BookOpen = () => <span className="text-lg">📖</span>
+const Lightbulb = () => <span className="text-lg">💡</span>
+const ArrowRight = () => <span className="text-sm">→</span>
 
 interface ConverterPageProps {
   fromUnit: SerializableUnit
