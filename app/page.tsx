@@ -14,7 +14,7 @@ import { popularPairs, categories, getUnitsByCategory } from "@/lib/units-regist
 import { FeaturedConverter } from "@/components/featured-converter"
 
 export const metadata: Metadata = {
-  title: "Unit Converter - Convert Any Unit Instantly | 150+ Units, 27 Categories",
+  title: "Universal Unit Converter | Convert Any Measurement Instantly – ConvertHaven",
   description:
     "Professional unit converter supporting 27 categories and 150+ units. Convert between metric, imperial, and specialized units instantly with accurate results and detailed explanations.",
   keywords:
