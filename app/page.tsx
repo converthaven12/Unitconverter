@@ -75,14 +75,19 @@ export default function HomePage() {
         <div className="flex min-h-screen w-full">
           <UnitConverterSidebar />
           <SidebarInset>
-            <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
-              <SidebarTrigger className="-ml-1" />
-              <Separator orientation="vertical" className="mr-2 h-4" />
-              <div className="flex items-center gap-2">
-                <Calculator className="size-5 text-primary" />
-                <h1 className="font-semibold">Unit Converter</h1>
-              </div>
-            </header>
+           <SidebarInset>
+  <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
+    <SidebarTrigger className="mr-1" />
+    <Separator orientation="vertical" className="mr-2 h-4" />
+    <div className="flex items-center gap-2">
+      <Calculator className="size-5 text-primary" />
+      <h1 className="font-semibold">Universal Unit Converter</h1>
+    </div>
+  </header>
+
+  <main className="flex-1 p-6 space-y-8">
+
+
 
             <main className="flex-1 p-6 space-y-8">
               <section className="text-center space-y-6">
