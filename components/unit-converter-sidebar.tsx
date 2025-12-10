@@ -124,7 +124,7 @@ export function UnitConverterSidebar({ className }: UnitConverterSidebarProps) {
         <div className="flex items-center gap-2 px-2 py-1">
           <Calculator className="size-5 text-primary" />
           <Link href="/" className="font-semibold text-lg hover:text-primary transition-colors">
-            Unit Converter
+            Unit Converter Tools
           </Link>
         </div>
       </SidebarHeader>
